@@ -21,8 +21,8 @@ public class StationeryItem {
     @Column(name = "item_id", nullable = false)
     private Integer itemId;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private StationeryType type;
 
     @Column(name = "name", nullable = false)
@@ -30,7 +30,4 @@ public class StationeryItem {
 
     @Column(name = "price", nullable = false)
     private int price;
-
-//    @OneToMany(mappedBy = "stationeryItem", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Picture> pictures;
 }
