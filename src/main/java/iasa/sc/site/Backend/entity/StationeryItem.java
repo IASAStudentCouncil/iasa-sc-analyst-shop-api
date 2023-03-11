@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +19,7 @@ public class StationeryItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "item_id", nullable = false)
-    private Integer id;
+    private Integer itemId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
@@ -28,4 +30,7 @@ public class StationeryItem {
 
     @Column(name = "price", nullable = false)
     private int price;
+
+//    @OneToMany(mappedBy = "stationeryItem", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Picture> pictures;
 }
