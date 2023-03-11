@@ -16,11 +16,16 @@ import lombok.NoArgsConstructor;
 public class StationeryItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "item_id", nullable = false)
     private Integer id;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
     private StationeryType type;
+
+    @Column(name = "name", nullable = false)
     private String name;
-    private String photoUrl;
+
+    @Column(name = "price", nullable = false)
     private int price;
 }
