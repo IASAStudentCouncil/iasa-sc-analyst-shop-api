@@ -1,4 +1,7 @@
 package iasa.sc.site.Backend.entity.enums;
 
-public class ClothesBaseType {
+public enum ClothesBaseType {
+    SWEATERS,
+    TSHIRTS,
+    OTHERS
 }
