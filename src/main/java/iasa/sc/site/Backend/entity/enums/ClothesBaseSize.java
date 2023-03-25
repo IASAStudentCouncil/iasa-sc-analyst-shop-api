@@ -4,5 +4,6 @@ public enum ClothesBaseSize {
     S,
     M,
     L,
-    XL
+    XL,
+    X
 }

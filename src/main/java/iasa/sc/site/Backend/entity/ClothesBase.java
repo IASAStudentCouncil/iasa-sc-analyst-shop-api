@@ -20,13 +20,17 @@ public class ClothesBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
     @Column(name = "text", unique = false, nullable = true)
     private String text;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, unique = false)
     private ClothesBaseType type;
+
     @Column(name = "price", nullable = false, unique = false)
     private Integer price;
+
     @OneToMany(mappedBy = "base")
     private List<ClothesBaseInfo> clothesBaseInfo;
 
