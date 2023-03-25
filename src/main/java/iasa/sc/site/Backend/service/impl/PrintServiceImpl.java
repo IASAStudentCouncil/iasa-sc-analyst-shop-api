@@ -6,11 +6,13 @@ import iasa.sc.site.Backend.entity.Print;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repository.PrintRepository;
+import iasa.sc.site.Backend.service.ImagesService;
 import iasa.sc.site.Backend.service.PrintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,12 +21,14 @@ import java.util.List;
 public class PrintServiceImpl implements PrintService {
     private final PrintRepository printRepository;
 
+    private final ImagesService imagesService;
+
     @Override
     public ResponseEntity<List<PrintDto>> getAllPrints() {
         List<PrintDto> responseBody = printRepository
                 .findAll()
                 .stream()
-                .map(PrintMapper.INSTANCE::printToDto)
+                .map(a -> PrintMapper.INSTANCE.printToDto(a, imagesService))
                 .toList();
         return new ResponseEntity<>(responseBody, HttpStatusCode.valueOf(200));
     }
@@ -36,17 +40,21 @@ public class PrintServiceImpl implements PrintService {
         } catch (Exception e) {
             throw new UnknownIdException("Id doesn`t exist in the database");
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatusCode.valueOf(204)).build();
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> addNewPrint(PrintDto printDto) {
         Print inputPrint = PrintMapper.INSTANCE.printDtoToPrint(printDto);
         try {
-            printRepository.save(inputPrint);
+            Print print = printRepository.save(inputPrint);
+            if (printDto.getPhotosUrl() != null) {
+                imagesService.saveAll(printDto.getPhotosUrl(), print.getUuid());
+            }
         } catch (Exception e) {
             throw new ValidationException("Something wrong in object`s fields");
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatusCode.valueOf(201)).build();
     }
 }
