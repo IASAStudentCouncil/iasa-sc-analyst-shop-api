@@ -1,9 +1,9 @@
 package iasa.sc.site.Backend.repository;
 
-import iasa.sc.site.Backend.entity.Picture;
+import iasa.sc.site.Backend.entity.Photocard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PictureRepository extends JpaRepository<Picture, Integer> {
+public interface PhotocardRepository extends JpaRepository<Photocard, Integer> {
 }

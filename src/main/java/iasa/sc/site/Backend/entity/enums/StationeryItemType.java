@@ -1,5 +1,5 @@
 package iasa.sc.site.Backend.entity.enums;
 
-public enum StationeryType {
+public enum StationeryItemType {
     STICKER, STICKERPACK, NOTEBOOK, OTHER
 }

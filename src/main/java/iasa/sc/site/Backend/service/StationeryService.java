@@ -1,20 +1,21 @@
 package iasa.sc.site.Backend.service;
 
-import iasa.sc.site.Backend.entity.StationeryItem;
+import iasa.sc.site.Backend.dto.StationeryItemDTO;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface StationeryService {
 
-    List<StationeryItem> getAll();
+    ResponseEntity<List<StationeryItemDTO>> getAll();
 
-    StationeryItem get(int id);
+    ResponseEntity<StationeryItemDTO> get(int id);
 
-    StationeryItem add(StationeryItem item);
+    ResponseEntity<Void> add(StationeryItemDTO stationeryItemDto);
 
-    void deleteAllItems();
+    ResponseEntity<Void> deleteAllItems();
 
-    void deleteById(int itemId);
+    ResponseEntity<Void> deleteById(int itemId);
 
-    StationeryItem editById(int itemId, StationeryItem item);
+    ResponseEntity<Void> editById(int itemId, StationeryItemDTO stationeryItemDto);
 }

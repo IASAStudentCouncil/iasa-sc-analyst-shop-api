@@ -1,55 +1,98 @@
 package iasa.sc.site.Backend.service.impl;
 
+import iasa.sc.site.Backend.dto.StationeryItemDTO;
+import iasa.sc.site.Backend.dto.mappers.StationeryItemMapper;
 import iasa.sc.site.Backend.entity.StationeryItem;
+import iasa.sc.site.Backend.exceptions.UnknownIdException;
+import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repository.StationeryRepository;
+import iasa.sc.site.Backend.service.ImageService;
 import iasa.sc.site.Backend.service.StationeryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class StationeryServiceImpl implements StationeryService {
-    private final StationeryRepository repository;
+
+    private final StationeryRepository stationeryRepository;
+
+    private final ImageService imageService;
 
     @Override
-    public List<StationeryItem> getAll() {
-        return repository.findAll();
+    public ResponseEntity<List<StationeryItemDTO>> getAll() {
+        List<StationeryItemDTO> responseBody = stationeryRepository
+                .findAll()
+                .stream()
+                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, imageService))
+                .toList();
+
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @Override
-    public StationeryItem get(int id) {
-        return repository.findById(id).orElseThrow(NoSuchElementException::new);
+    public ResponseEntity<StationeryItemDTO> get(int id) {
+        StationeryItemDTO responseBody = stationeryRepository
+                .findById(id)
+                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, imageService))
+                .orElseThrow(UnknownIdException::new);
+
+
+        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @Override
-    public StationeryItem add(StationeryItem item) {
-        return repository.save(item);
+    public ResponseEntity<Void> add(StationeryItemDTO stationeryItemDto) {
+        StationeryItem item;
+
+        try {
+            item = StationeryItemMapper.INSTANCE.stationeryItemDTOToStationeryItem(stationeryItemDto);
+        } catch (Exception e) {
+            throw new ValidationException();
+        }
+
+        stationeryRepository.save(item);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
-    public void deleteAllItems() {
-        repository.deleteAll();
+    public ResponseEntity<Void> deleteAllItems() {
+        stationeryRepository.deleteAll();
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
-    public void deleteById(int itemId) {
-        StationeryItem item = repository.findById(itemId).orElseThrow(NoSuchElementException::new);
-        repository.delete(item);
+    public ResponseEntity<Void> deleteById(int itemId) {
+        StationeryItem item = stationeryRepository.findById(itemId).orElseThrow(UnknownIdException::new);
+        stationeryRepository.delete(item);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
-    public StationeryItem editById(int itemId, StationeryItem item) {
-        StationeryItem itemEntity = repository.findById(itemId).orElseThrow(NoSuchElementException::new);
+    public ResponseEntity<Void> editById(int itemId, StationeryItemDTO stationeryItemDto) {
+        StationeryItem item;
+
+        try {
+            item = StationeryItemMapper.INSTANCE.stationeryItemDTOToStationeryItem(stationeryItemDto);
+        } catch (Exception e) {
+            throw new ValidationException();
+        }
+
+        StationeryItem itemEntity = stationeryRepository.findById(itemId).orElseThrow(UnknownIdException::new);
 
         itemEntity.setName(item.getName());
         itemEntity.setType(item.getType());
         itemEntity.setPrice(item.getPrice());
 
-        repository.save(itemEntity);
+        stationeryRepository.save(itemEntity);
 
-        return itemEntity;
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
