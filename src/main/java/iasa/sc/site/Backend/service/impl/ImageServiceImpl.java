@@ -4,7 +4,6 @@ import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
-import com.azure.storage.blob.models.BlobItem;
 import iasa.sc.site.Backend.entity.Image;
 import iasa.sc.site.Backend.repository.ImageRepository;
 import iasa.sc.site.Backend.service.ImageService;
@@ -29,6 +28,12 @@ public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
 
+    private BlobContainerClient getImageContainerClient() {
+        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
+
+        return blobServiceClient.getBlobContainerClient(containerName);
+    }
+
     @Override
     public List<Image> getAllImagesByUUID(UUID uuid) {
         return imageRepository.findByUUID(uuid);
@@ -46,35 +51,44 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void saveImage(MultipartFile image, UUID uuid) {
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
+        BlobContainerClient imageContainerClient = getImageContainerClient();
 
-        BlobContainerClient blobContainerClient = blobServiceClient.getBlobContainerClient(containerName);
+        BlobClient blobClient = imageContainerClient.getBlobClient(image.getName() + "-" + uuid.toString() + ".png");
 
-        BlobClient blobClient = blobContainerClient.getBlobClient(image.getName() + "-" + uuid.toString() + ".png");
+        uploadImage(blobClient, image);
 
+        imageRepository.save(new Image(0, blobClient.getBlobUrl(), uuid));
+    }
+
+    private void uploadImage(BlobClient blobClient, MultipartFile image) {
         try {
             blobClient.upload(image.getInputStream(), image.getSize(), true);
         } catch (IOException e) {
             throw new RuntimeException("Something is wrong with image");
         }
-
-        imageRepository.save(new Image(0, blobClient.getBlobUrl(), uuid));
     }
 
     @Override
     public void deleteAllImagesByUUID(UUID uuid) {
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
+        BlobContainerClient imageContainerClient = getImageContainerClient();
 
-        BlobContainerClient blobContainerClient = blobServiceClient.getBlobContainerClient(containerName);
-
-        List<BlobItem> deletedItems = blobContainerClient
+        imageContainerClient
                 .listBlobs()
                 .stream()
                 .filter(blobItem -> blobItem.getName().contains(uuid.toString()))
-                .toList();
-
-        deletedItems.forEach(blobItem -> blobContainerClient.getBlobClient(blobItem.getName()).delete());
+                .forEach(blobItem -> imageContainerClient.getBlobClient(blobItem.getName()).delete());
 
         imageRepository.deleteAllByUuid(uuid);
+    }
+
+    @Override
+    public void deleteAllImages() {
+        BlobContainerClient imageContainerClient = getImageContainerClient();
+
+        imageContainerClient
+                .listBlobs()
+                .forEach(blobItem -> imageContainerClient.getBlobClient(blobItem.getName()).delete());
+
+        imageRepository.deleteAll();
     }
 }

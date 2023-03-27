@@ -62,8 +62,11 @@ public class PhotocardServiceImpl implements PhotocardService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> deleteAllItems() {
         photocardRepository.deleteAll();
+
+        imageService.deleteAllImages();
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -16,4 +16,6 @@ public interface ImageService {
     void saveImage(MultipartFile image, UUID uuid);
 
     void deleteAllImagesByUUID(UUID uuid);
+
+    void deleteAllImages();
 }
