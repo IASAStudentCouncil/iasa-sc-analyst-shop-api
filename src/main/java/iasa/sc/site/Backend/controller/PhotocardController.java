@@ -4,8 +4,10 @@ import iasa.sc.site.Backend.dto.PhotocardDTO;
 import iasa.sc.site.Backend.service.PhotocardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,10 +30,11 @@ public class PhotocardController {
         return photocardService.get(id);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addItem(@RequestBody PhotocardDTO photocardDTO) {
-        return photocardService.add(photocardDTO);
+    public ResponseEntity<Void> addItem(@RequestPart("photocardDTO") PhotocardDTO photocardDTO,
+                                        @RequestPart("image") MultipartFile image) {
+        return photocardService.add(photocardDTO, image);
     }
 
     @PutMapping("/{id}")

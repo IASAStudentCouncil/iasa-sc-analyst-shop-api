@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,6 +17,6 @@ public class PhotocardDTO {
     @JsonProperty("type")
     private final PhotocardType type;
 
-    @JsonProperty("image_urls")
-    private final List<Image> imageURLs;
+    @JsonProperty("image_url")
+    private final Image imageURL;
 }

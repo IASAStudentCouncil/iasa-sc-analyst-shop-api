@@ -58,7 +58,12 @@
 			<artifactId>mapstruct</artifactId>
 			<version>${mapstruct-version}</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>com.azure.spring</groupId>
+			<artifactId>spring-cloud-azure-starter-storage-blob</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+    </dependencies>
 	<build>
 		<plugins>
 			<plugin>

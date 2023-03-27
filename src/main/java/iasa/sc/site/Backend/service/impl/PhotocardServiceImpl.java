@@ -8,10 +8,12 @@ import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repository.PhotocardRepository;
 import iasa.sc.site.Backend.service.ImageService;
 import iasa.sc.site.Backend.service.PhotocardService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,7 +23,6 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     private final PhotocardRepository photocardRepository;
     private final ImageService imageService;
-    private final PhotocardMapper photocardMapper;
 
     @Override
     public ResponseEntity<List<PhotocardDTO>> getAll() {
@@ -45,12 +46,14 @@ public class PhotocardServiceImpl implements PhotocardService {
     }
 
     @Override
-    public ResponseEntity<Void> add(PhotocardDTO photocardDTO) {
+    public ResponseEntity<Void> add(PhotocardDTO photocardDTO, MultipartFile image) {
 
         try {
             Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
 
             photocardRepository.save(photocard);
+
+            imageService.saveImage(image, photocard.getUuid());
         } catch (Exception e) {
             throw new ValidationException();
         }
@@ -66,17 +69,20 @@ public class PhotocardServiceImpl implements PhotocardService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> deleteById(int itemId) {
         Photocard photocard = photocardRepository.findById(itemId).orElseThrow(UnknownIdException::new);
 
         photocardRepository.delete(photocard);
+
+        imageService.deleteAllImagesByUUID(photocard.getUuid());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
     public ResponseEntity<Void> editById(int photocardId, PhotocardDTO photocardDTO) {
-        Photocard photocard = photocardMapper.DTOToPhotocard(photocardDTO);
+        Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
 
         Photocard photocardEntity = photocardRepository.findById(photocardId).orElseThrow(UnknownIdException::new);
 

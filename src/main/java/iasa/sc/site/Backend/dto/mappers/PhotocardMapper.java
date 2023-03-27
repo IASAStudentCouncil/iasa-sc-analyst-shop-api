@@ -14,7 +14,7 @@ public interface PhotocardMapper {
         return new PhotocardDTO(
                 photocard.getId(),
                 photocard.getType(),
-                imageService.getAllImagesByUUID(photocard.getUuid())
+                imageService.getImageByUUID(photocard.getUuid())
         );
     }
 
