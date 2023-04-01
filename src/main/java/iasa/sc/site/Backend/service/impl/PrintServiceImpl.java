@@ -6,13 +6,14 @@ import iasa.sc.site.Backend.entity.Print;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repository.PrintRepository;
-import iasa.sc.site.Backend.service.ImagesService;
+import iasa.sc.site.Backend.service.ImageService;
 import iasa.sc.site.Backend.service.PrintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,14 +22,14 @@ import java.util.List;
 public class PrintServiceImpl implements PrintService {
     private final PrintRepository printRepository;
 
-    private final ImagesService imagesService;
+    private final ImageService imageService;
 
     @Override
     public ResponseEntity<List<PrintDto>> getAllPrints() {
         List<PrintDto> responseBody = printRepository
                 .findAll()
                 .stream()
-                .map(a -> PrintMapper.INSTANCE.printToDto(a, imagesService))
+                .map(a -> PrintMapper.INSTANCE.printToDto(a, imageService))
                 .toList();
         return new ResponseEntity<>(responseBody, HttpStatusCode.valueOf(200));
     }
@@ -50,7 +51,7 @@ public class PrintServiceImpl implements PrintService {
         try {
             Print print = printRepository.save(inputPrint);
             if (printDto.getPhotosUrl() != null) {
-                imagesService.saveAll(printDto.getPhotosUrl(), print.getUuid());
+                imageService.saveAllImages(printDto.getPhotosUrl(), print.getUuid());
             }
         } catch (Exception e) {
             throw new ValidationException("Something wrong in object`s fields");

@@ -3,6 +3,7 @@ package iasa.sc.site.Backend.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import iasa.sc.site.Backend.entity.Image;
+import iasa.sc.site.Backend.entity.enums.ClothesBaseColor;
 import iasa.sc.site.Backend.entity.enums.ClothesBaseSize;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ public class ClothesBaseInfoDto {
 
     private Integer countOnStorage;
 
-    private String color;
+    private ClothesBaseColor color;
 
     private ClothesBaseSize clothesBaseSize;
 
@@ -23,7 +24,7 @@ public class ClothesBaseInfoDto {
     @JsonCreator
     public ClothesBaseInfoDto(@JsonProperty("id") Integer id
             , @JsonProperty("count_on_storage") Integer countOnStorage
-            , @JsonProperty("color") String color
+            , @JsonProperty("color") ClothesBaseColor color
             , @JsonProperty("size") ClothesBaseSize clothesBaseSize
             , @JsonProperty("images") List<Image> imageList) {
         this.id = id;

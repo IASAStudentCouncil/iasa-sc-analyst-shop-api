@@ -4,7 +4,7 @@ import iasa.sc.site.Backend.dto.ClothesBaseDto;
 import iasa.sc.site.Backend.dto.ClothesBaseInfoDto;
 import iasa.sc.site.Backend.entity.ClothesBase;
 import iasa.sc.site.Backend.entity.ClothesBaseInfo;
-import iasa.sc.site.Backend.service.ImagesService;
+import iasa.sc.site.Backend.service.ImageService;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -16,22 +16,22 @@ public interface ClothesBaseMapper {
 
     ClothesBase clothesBaseDtoToClothesBase(ClothesBaseDto dto);
 
-    default ClothesBaseDto clothesBaseToClothesBaseDto(ClothesBase clothesBase, ImagesService imagesService){
+    default ClothesBaseDto clothesBaseToClothesBaseDto(ClothesBase clothesBase, ImageService imageService){
         return new ClothesBaseDto(clothesBase.getId(),
                 clothesBase.getType(),
                 clothesBase.getPrice(),
-                clothesBase.getClothesBaseInfo().stream().map(info -> clothesBaseInfoToClothesBaseInfoDto(info,imagesService)).collect(Collectors.toList())
+                clothesBase.getClothesBaseInfo().stream().map(info -> clothesBaseInfoToClothesBaseInfoDto(info,imageService)).collect(Collectors.toList())
                 , clothesBase.getText());
     }
 
     ClothesBaseInfo clothesBaseInfoDtoToClothesBaseInfo(ClothesBaseInfoDto clothesBaseInfoDto);
 
     default ClothesBaseInfoDto clothesBaseInfoToClothesBaseInfoDto(ClothesBaseInfo clothesBaseInfo
-            , ImagesService imagesService) {
+            , ImageService imageService) {
         return new ClothesBaseInfoDto(clothesBaseInfo.getId(),
                 clothesBaseInfo.getCountOnStorage(),
                 clothesBaseInfo.getColor(),
                 clothesBaseInfo.getClothesBaseSize(),
-                imagesService.getAllPhotosByUUID(clothesBaseInfo.getUuid()));
+                imageService.getAllImagesByUUID(clothesBaseInfo.getUuid()));
     }
 }

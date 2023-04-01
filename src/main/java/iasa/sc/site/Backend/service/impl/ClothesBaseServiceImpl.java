@@ -5,7 +5,7 @@ import iasa.sc.site.Backend.dto.mappers.ClothesBaseMapper;
 import iasa.sc.site.Backend.entity.ClothesBase;
 import iasa.sc.site.Backend.repository.ClothesBaseRepository;
 import iasa.sc.site.Backend.service.ClothesBaseService;
-import iasa.sc.site.Backend.service.ImagesService;
+import iasa.sc.site.Backend.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ClothesBaseServiceImpl implements ClothesBaseService {
     private final ClothesBaseRepository clothesBaseRepository;
 
-    private final ImagesService imagesService;
+    private final ImageService imageService;
 
     @Override
     public ResponseEntity<List<ClothesBaseDto>> getAllClothesBases() {
@@ -25,7 +25,7 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
                 .findAll();
         List<ClothesBaseDto> dtos = responseBody
                 .stream()
-                .map(clothesBase -> ClothesBaseMapper.INSTANCE.clothesBaseToClothesBaseDto(clothesBase, imagesService))
+                .map(clothesBase -> ClothesBaseMapper.INSTANCE.clothesBaseToClothesBaseDto(clothesBase, imageService))
                 .toList();
         return ResponseEntity.ok(dtos);
     }
