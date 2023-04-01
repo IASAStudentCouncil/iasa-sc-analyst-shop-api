@@ -37,10 +37,10 @@ public class PhotocardController {
         return photocardService.add(photocardDTO, image);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> editItem(@PathVariable int id,
-                                         @RequestBody PhotocardDTO photocardDTO) {
+                                         @RequestPart("photocardDTO") PhotocardDTO photocardDTO) {
         return photocardService.editById(id, photocardDTO);
     }
 
