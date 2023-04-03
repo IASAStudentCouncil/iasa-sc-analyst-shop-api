@@ -18,4 +18,6 @@ public interface ImageService {
     void deleteAllImagesByUUID(UUID uuid);
 
     void deleteAllImages();
+
+    void deleteImageByName(String imageName);
 }
