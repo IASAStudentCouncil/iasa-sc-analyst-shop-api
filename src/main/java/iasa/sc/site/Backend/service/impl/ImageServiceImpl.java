@@ -2,37 +2,27 @@ package iasa.sc.site.Backend.service.impl;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.BlobServiceClient;
-import com.azure.storage.blob.BlobServiceClientBuilder;
 import iasa.sc.site.Backend.entity.Image;
+import iasa.sc.site.Backend.exceptions.UnexistingImageException;
 import iasa.sc.site.Backend.repository.ImageRepository;
 import iasa.sc.site.Backend.service.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
 
-    @Value("${azure.storage.connection-string}")
-    private String connectionString;
-
-    @Value("${azure.storage.container-name}")
-    private String containerName;
-
     private final ImageRepository imageRepository;
 
-    private BlobContainerClient getImageContainerClient() {
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
-
-        return blobServiceClient.getBlobContainerClient(containerName);
-    }
+    private final BlobContainerClient imageContainerClient;
 
     @Override
     public List<Image> getAllImagesByUUID(UUID uuid) {
@@ -51,12 +41,8 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void saveImage(MultipartFile image, UUID uuid) {
-        BlobContainerClient imageContainerClient = getImageContainerClient();
-
-        BlobClient blobClient = imageContainerClient.getBlobClient(image.getName() + "-" + uuid.toString() + ".png");
-
+        BlobClient blobClient = imageContainerClient.getBlobClient(image.getName() + "-" + uuid.toString() + "-" + generateRandomStringSalt() + ".png");
         uploadImage(blobClient, image);
-
         imageRepository.save(new Image(0, blobClient.getBlobUrl(), uuid));
     }
 
@@ -68,10 +54,17 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    private String generateRandomStringSalt() {
+        Random random = new SecureRandom();
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            stringBuilder.append(random.nextInt(10));
+        }
+        return stringBuilder.toString();
+    }
+
     @Override
     public void deleteAllImagesByUUID(UUID uuid) {
-        BlobContainerClient imageContainerClient = getImageContainerClient();
-
         imageContainerClient
                 .listBlobs()
                 .stream()
@@ -83,12 +76,16 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void deleteAllImages() {
-        BlobContainerClient imageContainerClient = getImageContainerClient();
-
         imageContainerClient
                 .listBlobs()
                 .forEach(blobItem -> imageContainerClient.getBlobClient(blobItem.getName()).delete());
 
         imageRepository.deleteAll();
+    }
+
+    @Override
+    public void deleteImageByName(String imageName) {
+        BlobClient blobClient = imageContainerClient.getBlobClient(imageName);
+        if (!blobClient.deleteIfExists()) throw new UnexistingImageException();
     }
 }
