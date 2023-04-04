@@ -1,5 +1,6 @@
 package iasa.sc.site.Backend.exceptions.handlers;
 
+import iasa.sc.site.Backend.exceptions.UnexistingImageException;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
 import org.springframework.web.ErrorResponse;
@@ -15,6 +16,11 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(value = {ValidationException.class})
     public ErrorResponse handleValidationException(ValidationException e) {
+        return new ErrorResponseImpl(e.getErrorCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(value = {UnexistingImageException.class})
+    public ErrorResponse handleUnexistingImageException(UnexistingImageException e) {
         return new ErrorResponseImpl(e.getErrorCode(), e.getMessage());
     }
 }
