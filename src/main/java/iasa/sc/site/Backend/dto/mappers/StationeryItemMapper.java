@@ -13,7 +13,7 @@ public interface StationeryItemMapper {
     default StationeryItemDTO stationeryItemToDTO(StationeryItem stationeryItem, ImageService imageService) {
         return new StationeryItemDTO(
                 stationeryItem.getId(),
-                stationeryItem.getType(),
+                stationeryItem.getType().toString(),
                 stationeryItem.getName(),
                 stationeryItem.getPrice(),
                 imageService.getAllImagesByUUID(stationeryItem.getUuid())
