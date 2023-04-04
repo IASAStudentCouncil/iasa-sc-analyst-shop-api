@@ -13,7 +13,7 @@ public interface PhotocardMapper {
     default PhotocardDTO photocardToDto(Photocard photocard, ImageService imageService) {
         return new PhotocardDTO(
                 photocard.getId(),
-                photocard.getType(),
+                photocard.getType().toString(),
                 imageService.getImageByUUID(photocard.getUuid())
         );
     }
