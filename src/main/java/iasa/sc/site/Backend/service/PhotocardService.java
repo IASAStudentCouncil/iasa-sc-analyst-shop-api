@@ -17,5 +17,5 @@ public interface PhotocardService {
 
     ResponseEntity<Void> deleteById(int itemId);
 
-    ResponseEntity<Void> editById(int itemId, PhotocardDTO photocardDTO);
+    ResponseEntity<Void> updateById(int itemId, PhotocardDTO photocardDTO, MultipartFile image);
 }

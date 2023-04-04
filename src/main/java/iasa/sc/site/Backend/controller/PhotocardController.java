@@ -40,8 +40,9 @@ public class PhotocardController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> editItem(@PathVariable int id,
-                                         @RequestPart("photocardDTO") PhotocardDTO photocardDTO) {
-        return photocardService.editById(id, photocardDTO);
+                                         @RequestPart("photocardDTO") PhotocardDTO photocardDTO,
+                                         @RequestPart("image") MultipartFile image) {
+        return photocardService.updateById(id, photocardDTO, image);
     }
 
     @DeleteMapping
