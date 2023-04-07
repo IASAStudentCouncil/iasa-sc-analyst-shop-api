@@ -8,10 +8,12 @@ import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repository.StationeryRepository;
 import iasa.sc.site.Backend.service.ImageService;
 import iasa.sc.site.Backend.service.StationeryService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class StationeryServiceImpl implements StationeryService {
     private final StationeryRepository stationeryRepository;
 
     private final ImageService imageService;
+
 
     @Override
     public ResponseEntity<List<StationeryItemDTO>> getAll() {
@@ -46,7 +49,7 @@ public class StationeryServiceImpl implements StationeryService {
     }
 
     @Override
-    public ResponseEntity<Void> add(StationeryItemDTO stationeryItemDto) {
+    public ResponseEntity<Void> add(StationeryItemDTO stationeryItemDto, List<MultipartFile> images) {
         StationeryItem item;
 
         try {
@@ -57,26 +60,38 @@ public class StationeryServiceImpl implements StationeryService {
 
         stationeryRepository.save(item);
 
+        imageService.saveAllImages(images, item.getUuid());
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> deleteAllItems() {
+        stationeryRepository
+                .findAll()
+                .forEach(image -> imageService.deleteAllImagesByUUID(image.getUuid()));
+
         stationeryRepository.deleteAll();
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> deleteById(int itemId) {
         StationeryItem item = stationeryRepository.findById(itemId).orElseThrow(UnknownIdException::new);
+
         stationeryRepository.delete(item);
+
+        imageService.deleteAllImagesByUUID(item.getUuid());
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
-    public ResponseEntity<Void> editById(int itemId, StationeryItemDTO stationeryItemDto) {
+    @Transactional
+    public ResponseEntity<Void> updateById(int itemId, StationeryItemDTO stationeryItemDto, List<MultipartFile> images) {
         StationeryItem item;
 
         try {
@@ -92,6 +107,8 @@ public class StationeryServiceImpl implements StationeryService {
         itemEntity.setPrice(item.getPrice());
 
         stationeryRepository.save(itemEntity);
+
+        imageService.saveAllImages(images, itemEntity.getUuid());
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

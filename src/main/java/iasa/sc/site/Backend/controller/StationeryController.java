@@ -4,13 +4,15 @@ import iasa.sc.site.Backend.dto.StationeryItemDTO;
 import iasa.sc.site.Backend.service.StationeryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/stationery")
+@RequestMapping("/api/stationery")
 @RequiredArgsConstructor
 public class StationeryController {
 
@@ -28,17 +30,19 @@ public class StationeryController {
         return stationeryService.get(id);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addItem(@RequestBody StationeryItemDTO stationeryItemDto) {
-        return stationeryService.add(stationeryItemDto);
+    public ResponseEntity<Void> addItem(@RequestPart("stationeryItemDTO") StationeryItemDTO stationeryItemDTO,
+                                        @RequestPart("images") List<MultipartFile> images) {
+        return stationeryService.add(stationeryItemDTO, images);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> editItem(@PathVariable int id,
-                                         @RequestBody StationeryItemDTO stationeryItemDto) {
-        return stationeryService.editById(id, stationeryItemDto);
+                                         @RequestPart("stationeryItemDTO") StationeryItemDTO stationeryItemDTO,
+                                         @RequestPart("images") List<MultipartFile> images) {
+        return stationeryService.updateById(id, stationeryItemDTO, images);
     }
 
     @DeleteMapping

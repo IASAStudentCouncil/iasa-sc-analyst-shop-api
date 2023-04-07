@@ -84,16 +84,20 @@ public class PhotocardServiceImpl implements PhotocardService {
     }
 
     @Override
-    public ResponseEntity<Void> editById(int photocardId, PhotocardDTO photocardDTO) {
-        Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
-
+    @Transactional
+    public ResponseEntity<Void> updateById(int photocardId, PhotocardDTO photocardDTO, MultipartFile image) {
         Photocard photocardEntity = photocardRepository.findById(photocardId).orElseThrow(UnknownIdException::new);
 
         try {
+            Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
+
             photocardEntity.setType(photocard.getType());
         } catch (Exception e) {
             throw new ValidationException();
         }
+
+        imageService.deleteAllImagesByUUID(photocardEntity.getUuid());
+        imageService.saveImage(image, photocardEntity.getUuid());
 
         photocardRepository.save(photocardEntity);
 

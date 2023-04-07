@@ -2,21 +2,19 @@ package iasa.sc.site.Backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import iasa.sc.site.Backend.entity.Image;
-import iasa.sc.site.Backend.entity.enums.PhotocardType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 public class PhotocardDTO {
-    @JsonProperty("id")
     private final Integer id;
+    private final String type;
+    private final Image image;
 
-    @JsonProperty("type")
-    private final PhotocardType type;
-
-    @JsonProperty("image_url")
-    private final Image imageURL;
+    public PhotocardDTO(@JsonProperty("id") Integer id,
+                        @JsonProperty("type") String type,
+                        @JsonProperty("image") Image image) {
+        this.id = id;
+        this.type = type;
+        this.image = image;
+    }
 }
