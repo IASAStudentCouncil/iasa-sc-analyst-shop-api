@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class UnexistingImageException extends RuntimeException {
-    private final String errorCode = "400";
+    private final String errorCode = "404";
 
     public UnexistingImageException() {
         super("This image does not exist in blob storage");
