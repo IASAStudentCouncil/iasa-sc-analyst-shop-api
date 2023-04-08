@@ -1,13 +1,13 @@
-package iasa.sc.site.Backend.service.impl;
+package iasa.sc.site.Backend.services.impl;
 
-import iasa.sc.site.Backend.dto.StationeryItemDTO;
-import iasa.sc.site.Backend.dto.mappers.StationeryItemMapper;
-import iasa.sc.site.Backend.entity.StationeryItem;
+import iasa.sc.site.Backend.dtos.StationeryItemDTO;
+import iasa.sc.site.Backend.dtos.mappers.StationeryItemMapper;
+import iasa.sc.site.Backend.entities.StationeryItem;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
-import iasa.sc.site.Backend.repository.StationeryRepository;
-import iasa.sc.site.Backend.service.ImageService;
-import iasa.sc.site.Backend.service.StationeryService;
+import iasa.sc.site.Backend.repositories.StationeryRepository;
+import iasa.sc.site.Backend.services.ImageService;
+import iasa.sc.site.Backend.services.StationeryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,14 +20,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StationeryServiceImpl implements StationeryService {
-
     private final StationeryRepository stationeryRepository;
 
     private final ImageService imageService;
 
-
     @Override
-    public ResponseEntity<List<StationeryItemDTO>> getAll() {
+    public ResponseEntity<List<StationeryItemDTO>> getAllStationeryItems() {
         List<StationeryItemDTO> responseBody = stationeryRepository
                 .findAll()
                 .stream()
@@ -38,7 +36,7 @@ public class StationeryServiceImpl implements StationeryService {
     }
 
     @Override
-    public ResponseEntity<StationeryItemDTO> get(int id) {
+    public ResponseEntity<StationeryItemDTO> getStationeryItemById(int id) {
         StationeryItemDTO responseBody = stationeryRepository
                 .findById(id)
                 .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, imageService))
@@ -49,7 +47,7 @@ public class StationeryServiceImpl implements StationeryService {
     }
 
     @Override
-    public ResponseEntity<Void> add(StationeryItemDTO stationeryItemDto, List<MultipartFile> images) {
+    public ResponseEntity<Void> addStationeryItem(StationeryItemDTO stationeryItemDto, List<MultipartFile> images) {
         StationeryItem item;
 
         try {
@@ -67,7 +65,7 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> deleteAllItems() {
+    public ResponseEntity<Void> deleteAllStationeryItems() {
         stationeryRepository
                 .findAll()
                 .forEach(image -> imageService.deleteAllImagesByUUID(image.getUuid()));
@@ -79,7 +77,7 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> deleteById(int itemId) {
+    public ResponseEntity<Void> deleteStationeryItemById(int itemId) {
         StationeryItem item = stationeryRepository.findById(itemId).orElseThrow(UnknownIdException::new);
 
         stationeryRepository.delete(item);
@@ -91,7 +89,7 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> updateById(int itemId, StationeryItemDTO stationeryItemDto, List<MultipartFile> images) {
+    public ResponseEntity<Void> updateStationeryItemById(int itemId, StationeryItemDTO stationeryItemDto, List<MultipartFile> images) {
         StationeryItem item;
 
         try {

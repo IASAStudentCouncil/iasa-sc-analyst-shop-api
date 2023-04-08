@@ -1,6 +1,6 @@
-package iasa.sc.site.Backend.service;
+package iasa.sc.site.Backend.services;
 
-import iasa.sc.site.Backend.entity.Image;
+import iasa.sc.site.Backend.entities.Image;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

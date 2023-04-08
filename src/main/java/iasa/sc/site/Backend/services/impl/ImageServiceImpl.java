@@ -1,11 +1,11 @@
-package iasa.sc.site.Backend.service.impl;
+package iasa.sc.site.Backend.services.impl;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
-import iasa.sc.site.Backend.entity.Image;
+import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.exceptions.UnexistingImageException;
-import iasa.sc.site.Backend.repository.ImageRepository;
-import iasa.sc.site.Backend.service.ImageService;
+import iasa.sc.site.Backend.repositories.ImageRepository;
+import iasa.sc.site.Backend.services.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +19,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
+    private static final int saltLength = 7;
 
     private final ImageRepository imageRepository;
 
@@ -26,7 +27,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public List<Image> getAllImagesByUUID(UUID uuid) {
-        return imageRepository.findByUUID(uuid);
+        return imageRepository.findImagesByUuid(uuid);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class ImageServiceImpl implements ImageService {
     private String generateRandomStringSalt() {
         Random random = new SecureRandom();
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < saltLength; i++) {
             stringBuilder.append(random.nextInt(10));
         }
         return stringBuilder.toString();
@@ -70,7 +71,7 @@ public class ImageServiceImpl implements ImageService {
                 .stream()
                 .filter(blobItem -> blobItem.getName().contains(uuid.toString()))
                 .forEach(blobItem -> imageContainerClient.getBlobClient(blobItem.getName()).delete());
-
+        
         imageRepository.deleteAllByUuid(uuid);
     }
 

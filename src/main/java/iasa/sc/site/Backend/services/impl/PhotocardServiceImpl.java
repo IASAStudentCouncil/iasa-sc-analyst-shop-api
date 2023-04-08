@@ -1,13 +1,13 @@
-package iasa.sc.site.Backend.service.impl;
+package iasa.sc.site.Backend.services.impl;
 
-import iasa.sc.site.Backend.dto.PhotocardDTO;
-import iasa.sc.site.Backend.dto.mappers.PhotocardMapper;
-import iasa.sc.site.Backend.entity.Photocard;
+import iasa.sc.site.Backend.dtos.PhotocardDTO;
+import iasa.sc.site.Backend.dtos.mappers.PhotocardMapper;
+import iasa.sc.site.Backend.entities.Photocard;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
-import iasa.sc.site.Backend.repository.PhotocardRepository;
-import iasa.sc.site.Backend.service.ImageService;
-import iasa.sc.site.Backend.service.PhotocardService;
+import iasa.sc.site.Backend.repositories.PhotocardRepository;
+import iasa.sc.site.Backend.services.ImageService;
+import iasa.sc.site.Backend.services.PhotocardService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PhotocardServiceImpl implements PhotocardService {
-
     private final PhotocardRepository photocardRepository;
+
     private final ImageService imageService;
 
     @Override
-    public ResponseEntity<List<PhotocardDTO>> getAll() {
+    public ResponseEntity<List<PhotocardDTO>> getAllPhotocards() {
         List<PhotocardDTO> responseBody = photocardRepository
                 .findAll()
                 .stream()
@@ -36,7 +36,7 @@ public class PhotocardServiceImpl implements PhotocardService {
     }
 
     @Override
-    public ResponseEntity<PhotocardDTO> get(int id) {
+    public ResponseEntity<PhotocardDTO> getPhotocardById(int id) {
         PhotocardDTO responseBody = photocardRepository
                 .findById(id)
                 .map(photocard -> PhotocardMapper.INSTANCE.photocardToDto(photocard, imageService))
@@ -46,7 +46,7 @@ public class PhotocardServiceImpl implements PhotocardService {
     }
 
     @Override
-    public ResponseEntity<Void> add(PhotocardDTO photocardDTO, MultipartFile image) {
+    public ResponseEntity<Void> addNewPhotocard(PhotocardDTO photocardDTO, MultipartFile image) {
 
         try {
             Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
@@ -63,7 +63,7 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> deleteAllItems() {
+    public ResponseEntity<Void> deleteAllPhotocards() {
         photocardRepository.deleteAll();
 
         imageService.deleteAllImages();
@@ -73,7 +73,7 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> deleteById(int itemId) {
+    public ResponseEntity<Void> deletePhotocardById(int itemId) {
         Photocard photocard = photocardRepository.findById(itemId).orElseThrow(UnknownIdException::new);
 
         photocardRepository.delete(photocard);
@@ -85,7 +85,7 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> updateById(int photocardId, PhotocardDTO photocardDTO, MultipartFile image) {
+    public ResponseEntity<Void> updatePhotocardById(int photocardId, PhotocardDTO photocardDTO, MultipartFile image) {
         Photocard photocardEntity = photocardRepository.findById(photocardId).orElseThrow(UnknownIdException::new);
 
         try {

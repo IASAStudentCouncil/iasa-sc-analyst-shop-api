@@ -1,11 +1,11 @@
-package iasa.sc.site.Backend.service.impl;
+package iasa.sc.site.Backend.services.impl;
 
-import iasa.sc.site.Backend.dto.ClothesBaseDto;
-import iasa.sc.site.Backend.dto.mappers.ClothesBaseMapper;
-import iasa.sc.site.Backend.entity.ClothesBase;
-import iasa.sc.site.Backend.repository.ClothesBaseRepository;
-import iasa.sc.site.Backend.service.ClothesBaseService;
-import iasa.sc.site.Backend.service.ImageService;
+import iasa.sc.site.Backend.dtos.ClothesBaseDTO;
+import iasa.sc.site.Backend.dtos.mappers.ClothesBaseMapper;
+import iasa.sc.site.Backend.entities.ClothesBase;
+import iasa.sc.site.Backend.repositories.ClothesBaseRepository;
+import iasa.sc.site.Backend.services.ClothesBaseService;
+import iasa.sc.site.Backend.services.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,4 +29,5 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
                 .toList();
         return ResponseEntity.ok(dtos);
     }
+//    public ResponseEntity<>
 }
