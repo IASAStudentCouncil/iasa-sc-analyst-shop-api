@@ -1,7 +1,7 @@
-package iasa.sc.site.Backend.dto;
+package iasa.sc.site.Backend.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import iasa.sc.site.Backend.entity.Image;
+import iasa.sc.site.Backend.entities.Image;
 import lombok.Data;
 
 import java.util.List;

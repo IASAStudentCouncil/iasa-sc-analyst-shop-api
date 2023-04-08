@@ -1,8 +1,8 @@
-package iasa.sc.site.Backend.dto.mappers;
+package iasa.sc.site.Backend.dtos.mappers;
 
-import iasa.sc.site.Backend.dto.StationeryItemDTO;
-import iasa.sc.site.Backend.entity.StationeryItem;
-import iasa.sc.site.Backend.service.ImageService;
+import iasa.sc.site.Backend.dtos.StationeryItemDTO;
+import iasa.sc.site.Backend.entities.StationeryItem;
+import iasa.sc.site.Backend.services.ImageService;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
