@@ -1,6 +1,6 @@
-package iasa.sc.site.Backend.controller;
+package iasa.sc.site.Backend.controllers;
 
-import iasa.sc.site.Backend.service.ImageService;
+import iasa.sc.site.Backend.services.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/images")
+@RequestMapping("/images")
 @RequiredArgsConstructor
 public class ImageController {
     private final ImageService imageService;
