@@ -1,4 +1,4 @@
-package iasa.sc.site.Backend.entity;
+package iasa.sc.site.Backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;

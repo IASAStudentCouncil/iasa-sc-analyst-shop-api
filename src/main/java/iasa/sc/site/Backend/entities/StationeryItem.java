@@ -1,6 +1,6 @@
-package iasa.sc.site.Backend.entity;
+package iasa.sc.site.Backend.entities;
 
-import iasa.sc.site.Backend.entity.enums.PhotocardType;
+import iasa.sc.site.Backend.entities.enums.StationeryItemType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,13 +11,14 @@ import org.hibernate.annotations.GenerationTime;
 
 import java.util.UUID;
 
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-@Table(name = "photocards")
-public class Photocard {
+@Table(name = "stationery")
+public class StationeryItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -27,7 +28,14 @@ public class Photocard {
     @Generated(value = GenerationTime.INSERT)
     private UUID uuid;
 
-    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PhotocardType type;
+    @Column(name = "type", nullable = false)
+    private StationeryItemType type;
+
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "price", nullable = false)
+    private int price;
+
 }

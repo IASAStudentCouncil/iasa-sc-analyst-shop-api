@@ -1,6 +1,6 @@
-package iasa.sc.site.Backend.entity;
+package iasa.sc.site.Backend.entities;
 
-import iasa.sc.site.Backend.entity.enums.PrintType;
+import iasa.sc.site.Backend.entities.enums.PrintType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,16 +1,15 @@
-package iasa.sc.site.Backend.entity;
+package iasa.sc.site.Backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import iasa.sc.site.Backend.entity.enums.ClothesBaseColor;
-import iasa.sc.site.Backend.entity.enums.ClothesBaseSize;
+import iasa.sc.site.Backend.entities.enums.ClothesBaseColor;
+import iasa.sc.site.Backend.entities.enums.ClothesBaseSize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
