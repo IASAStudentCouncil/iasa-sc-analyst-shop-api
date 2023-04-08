@@ -1,4 +1,4 @@
-package iasa.sc.site.Backend.config;
+package iasa.sc.site.Backend.configs;
 
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
