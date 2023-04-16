@@ -4,6 +4,7 @@ import iasa.sc.site.Backend.dtos.PrintDto;
 import iasa.sc.site.Backend.services.PrintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,22 +29,29 @@ public class PrintController {
         return printService.deletePrintById(id);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addPrint(@RequestParam("print") PrintDto printDto,
-                                         @RequestParam("images") List<MultipartFile> images) {
+    public ResponseEntity<Void> addPrint(@RequestPart("print") PrintDto printDto,
+                                         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return printService.addNewPrint(printDto, images);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<Void> updatePrint(@RequestParam("print") PrintDto printDto,
-                                            @RequestParam("images") List<MultipartFile> images) {
+    public ResponseEntity<Void> updatePrint(@RequestPart("print") PrintDto printDto,
+                                            @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return printService.updatePrint(printDto, images);
     }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PrintDto> getPrintById(@PathVariable("id") String printId){
+    public ResponseEntity<PrintDto> getPrintById(@PathVariable("id") String printId) {
         return printService.getPrintById(printId);
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteAllPrints() {
+        return printService.deleteAllPrints();
     }
 }

@@ -15,5 +15,7 @@ public interface PrintService {
 
     ResponseEntity<Void> updatePrint(PrintDto printDto, List<MultipartFile> images);
 
+    ResponseEntity<Void> deleteAllPrints();
+
     ResponseEntity<PrintDto> getPrintById(String id);
 }

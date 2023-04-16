@@ -9,6 +9,7 @@ import iasa.sc.site.Backend.repositories.PrintRepository;
 import iasa.sc.site.Backend.services.ImageService;
 import iasa.sc.site.Backend.services.PrintService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,9 +53,9 @@ public class PrintServiceImpl implements PrintService {
     public ResponseEntity<Void> addNewPrint(PrintDto printDto, List<MultipartFile> images) {
         try {
             Print inputPrint = PrintMapper.INSTANCE.printDtoToPrint(printDto);
-            printRepository.save(inputPrint);
+            inputPrint = printRepository.save(inputPrint);
             if (images != null) {
-                imageService.saveAllImages(images, printDto.getUuid());
+                imageService.saveAllImages(images, inputPrint.getUuid());
             }
         } catch (Exception e) {
             throw new ValidationException("Something wrong in object`s fields");
@@ -66,9 +67,9 @@ public class PrintServiceImpl implements PrintService {
     public ResponseEntity<Void> updatePrint(PrintDto printDto, List<MultipartFile> images) {
         try {
             Print print = PrintMapper.INSTANCE.printDtoToPrint(printDto);
-            printRepository.save(print);
+            print = printRepository.save(print);
             if (images != null) {
-                imageService.saveAllImages(images, printDto.getUuid());
+                imageService.saveAllImages(images, print.getUuid());
             }
         } catch (Exception e) {
             throw new ValidationException();
@@ -87,5 +88,14 @@ public class PrintServiceImpl implements PrintService {
         } catch (Exception e) {
             throw new UnknownIdException();
         }
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<Void> deleteAllPrints() {
+        List<Print> prints = printRepository.findAll();
+        prints.forEach(print -> imageService.deleteAllImagesByUUID(print.getUuid()));
+        printRepository.deleteAll();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
