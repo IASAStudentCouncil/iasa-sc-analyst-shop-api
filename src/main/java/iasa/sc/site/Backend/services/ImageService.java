@@ -9,6 +9,8 @@ import java.util.UUID;
 public interface ImageService {
     List<Image> getAllImagesByUUID(UUID uuid);
 
+    List<Image> getAllImages();
+
     Image getImageByUUID(UUID uuid);
 
     void saveAllImages(List<MultipartFile> images, UUID uuid);

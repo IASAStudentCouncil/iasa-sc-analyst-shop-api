@@ -36,6 +36,11 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    public List<Image> getAllImages() {
+        return imageRepository.findAll();
+    }
+
+    @Override
     public void saveAllImages(List<MultipartFile> images, UUID uuid) {
         images.forEach(image -> saveImage(image, uuid));
     }
@@ -71,7 +76,7 @@ public class ImageServiceImpl implements ImageService {
                 .stream()
                 .filter(blobItem -> blobItem.getName().contains(uuid.toString()))
                 .forEach(blobItem -> imageContainerClient.getBlobClient(blobItem.getName()).delete());
-        
+
         imageRepository.deleteAllByUuid(uuid);
     }
 
