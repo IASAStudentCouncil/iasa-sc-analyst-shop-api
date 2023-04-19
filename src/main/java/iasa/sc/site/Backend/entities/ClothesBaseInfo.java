@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import java.util.UUID;
 
@@ -38,7 +40,11 @@ public class ClothesBaseInfo {
     @Enumerated(EnumType.STRING)
     @Column(name = "size", nullable = false, unique = false)
     private ClothesBaseSize clothesBaseSize;
+
+    @Column(name = "uuid", unique = true, nullable = false, columnDefinition = "uuid")
+    @Generated(value = GenerationTime.INSERT)
     private UUID uuid;
+
     @ManyToOne
     @JoinColumn(name = "clothes_base_id", unique = false, nullable = false)
     private ClothesBase base;
