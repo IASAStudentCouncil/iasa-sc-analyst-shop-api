@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
-    private static final int saltLength = 7;
+    private static final int SALT_LENGTH = 7;
 
     private final ImageRepository imageRepository;
 
@@ -63,7 +63,7 @@ public class ImageServiceImpl implements ImageService {
     private String generateRandomStringSalt() {
         Random random = new SecureRandom();
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < saltLength; i++) {
+        for (int i = 0; i < SALT_LENGTH; i++) {
             stringBuilder.append(random.nextInt(10));
         }
         return stringBuilder.toString();
