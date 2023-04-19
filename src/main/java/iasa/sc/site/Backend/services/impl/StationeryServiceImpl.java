@@ -2,6 +2,7 @@ package iasa.sc.site.Backend.services.impl;
 
 import iasa.sc.site.Backend.dtos.StationeryItemDTO;
 import iasa.sc.site.Backend.dtos.mappers.StationeryItemMapper;
+import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.entities.StationeryItem;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
@@ -26,10 +27,12 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     public ResponseEntity<List<StationeryItemDTO>> getAllStationeryItems() {
+        List<Image> images = imageService.getAllImages();
+
         List<StationeryItemDTO> responseBody = stationeryRepository
                 .findAll()
                 .stream()
-                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, imageService))
+                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, images))
                 .toList();
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
@@ -37,11 +40,12 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     public ResponseEntity<StationeryItemDTO> getStationeryItemById(int id) {
+        List<Image> images = imageService.getAllImages();
+
         StationeryItemDTO responseBody = stationeryRepository
                 .findById(id)
-                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, imageService))
+                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, images))
                 .orElseThrow(UnknownIdException::new);
-
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }

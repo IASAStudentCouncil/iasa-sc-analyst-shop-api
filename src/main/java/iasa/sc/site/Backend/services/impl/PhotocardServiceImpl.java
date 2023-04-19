@@ -2,6 +2,7 @@ package iasa.sc.site.Backend.services.impl;
 
 import iasa.sc.site.Backend.dtos.PhotocardDTO;
 import iasa.sc.site.Backend.dtos.mappers.PhotocardMapper;
+import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.entities.Photocard;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
@@ -26,10 +27,12 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     @Override
     public ResponseEntity<List<PhotocardDTO>> getAllPhotocards() {
+        List<Image> images = imageService.getAllImages();
+
         List<PhotocardDTO> responseBody = photocardRepository
                 .findAll()
                 .stream()
-                .map(photocard -> PhotocardMapper.INSTANCE.photocardToDto(photocard, imageService))
+                .map(photocard -> PhotocardMapper.INSTANCE.photocardToDto(photocard, images))
                 .toList();
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
@@ -37,9 +40,11 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     @Override
     public ResponseEntity<PhotocardDTO> getPhotocardById(int id) {
+        List<Image> images = imageService.getAllImages();
+
         PhotocardDTO responseBody = photocardRepository
                 .findById(id)
-                .map(photocard -> PhotocardMapper.INSTANCE.photocardToDto(photocard, imageService))
+                .map(photocard -> PhotocardMapper.INSTANCE.photocardToDto(photocard, images))
                 .orElseThrow(UnknownIdException::new);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
