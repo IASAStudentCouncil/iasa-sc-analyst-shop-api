@@ -32,10 +32,11 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
     private final ImageService imageService;
 
     @Override
-    public ResponseEntity<List<ClothesBaseDto>> getAllClothesBases() {
+    public ResponseEntity<List<ClothesBaseDTO>> getAllClothesBases() {
         List<ClothesBase> responseBody = clothesBaseRepository
                 .findAll();
-        List<ClothesBaseDto> dtos = responseBody
+        List<Image> images = imageService.getAllImages();
+        List<ClothesBaseDTO> dtos = responseBody
                 .stream()
                 .map(clothesBase -> ClothesBaseMapper.INSTANCE.clothesBaseToClothesBaseDto(clothesBase, images))
                 .toList();
