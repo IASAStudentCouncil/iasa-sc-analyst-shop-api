@@ -31,7 +31,7 @@ public class PrintServiceImpl implements PrintService {
         List<PrintDto> responseBody = printRepository
                 .findAll()
                 .stream()
-                .map(a -> PrintMapper.INSTANCE.printToDto(a, imageService))
+                .map(PrintMapper.INSTANCE::printToDto)
                 .toList();
         return new ResponseEntity<>(responseBody, HttpStatusCode.valueOf(200));
     }
@@ -82,9 +82,8 @@ public class PrintServiceImpl implements PrintService {
         try {
             return ResponseEntity.ok(PrintMapper.INSTANCE
                     .printToDto(printRepository
-                                    .findById(Integer.parseInt(id))
-                                    .orElseThrow(RuntimeException::new),
-                            imageService));
+                            .findById(Integer.parseInt(id))
+                            .orElseThrow(RuntimeException::new)));
         } catch (Exception e) {
             throw new UnknownIdException();
         }

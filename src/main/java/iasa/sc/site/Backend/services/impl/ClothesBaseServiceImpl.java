@@ -5,7 +5,6 @@ import iasa.sc.site.Backend.dtos.ClothesBaseInfoDto;
 import iasa.sc.site.Backend.dtos.mappers.ClothesBaseMapper;
 import iasa.sc.site.Backend.entities.ClothesBase;
 import iasa.sc.site.Backend.entities.ClothesBaseInfo;
-import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repositories.ClothesBaseInfoRepository;
@@ -14,6 +13,7 @@ import iasa.sc.site.Backend.services.ClothesBaseService;
 import iasa.sc.site.Backend.services.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,10 +35,9 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
     public ResponseEntity<List<ClothesBaseDTO>> getAllClothesBases() {
         List<ClothesBase> responseBody = clothesBaseRepository
                 .findAll();
-        List<Image> images = imageService.getAllImages();
         List<ClothesBaseDTO> dtos = responseBody
                 .stream()
-                .map(clothesBase -> ClothesBaseMapper.INSTANCE.clothesBaseToClothesBaseDto(clothesBase, images))
+                .map(ClothesBaseMapper.INSTANCE::clothesBaseToClothesBaseDto)
                 .toList();
         return ResponseEntity.ok(dtos);
     }
@@ -48,8 +47,7 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
         ClothesBase clothesBase = clothesBaseRepository
                 .findById(Integer.parseInt(id))
                 .orElseThrow(() -> new NoSuchElementException("No element with this id in database"));
-        List<Image> images = imageService.getAllImages();
-        ClothesBaseDTO clothesBaseDTO = ClothesBaseMapper.INSTANCE.clothesBaseToClothesBaseDto(clothesBase, images);
+        ClothesBaseDTO clothesBaseDTO = ClothesBaseMapper.INSTANCE.clothesBaseToClothesBaseDto(clothesBase);
         return new ResponseEntity<>(clothesBaseDTO, HttpStatus.OK);
     }
 
@@ -91,5 +89,15 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
             throw new UnknownIdException("No item with this id in database");
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Override
+    public ResponseEntity<List<ClothesBaseInfoDto>> getAllClothesBasesInfo() {
+        List<ClothesBaseInfoDto> body = clothesBaseInfoRepository
+                .findAll()
+                .stream()
+                .map(ClothesBaseMapper.INSTANCE::clothesBaseInfoToClothesBaseInfoDto)
+                .toList();
+        return new ResponseEntity<>(body, HttpStatusCode.valueOf(200));
     }
 }

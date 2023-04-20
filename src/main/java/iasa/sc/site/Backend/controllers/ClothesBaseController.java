@@ -49,4 +49,9 @@ public class ClothesBaseController {
     public ResponseEntity<Void> deleteClothesBaseInfo(@PathVariable("id") String id) {
         return clothesBaseService.deleteClothesBaseInfoById(id);
     }
+
+    @GetMapping("/info")
+    public ResponseEntity<List<ClothesBaseInfoDto>> getAllClothesBasesInfo() {
+        return clothesBaseService.getAllClothesBasesInfo();
+    }
 }

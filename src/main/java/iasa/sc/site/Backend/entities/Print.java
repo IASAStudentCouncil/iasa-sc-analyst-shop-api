@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -33,4 +34,8 @@ public class Print {
 
     @Column(name = "text", nullable = true, unique = false)
     private String text;
+
+    @OneToMany
+    @JoinColumn(name = "uuid", referencedColumnName = "uuid")
+    private List<Image> images;
 }
