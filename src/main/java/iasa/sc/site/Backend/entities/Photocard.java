@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -30,4 +32,8 @@ public class Photocard {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private PhotocardType type;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "uuid", referencedColumnName = "uuid")
+    private Image image;
 }

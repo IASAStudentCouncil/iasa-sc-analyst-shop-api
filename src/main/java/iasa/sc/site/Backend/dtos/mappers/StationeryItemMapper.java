@@ -13,13 +13,13 @@ import java.util.List;
 public interface StationeryItemMapper {
     StationeryItemMapper INSTANCE = Mappers.getMapper(StationeryItemMapper.class);
 
-    default StationeryItemDTO stationeryItemToDTO(StationeryItem stationeryItem, List<Image> images) {
+    default StationeryItemDTO stationeryItemToDTO(StationeryItem stationeryItem) {
         return new StationeryItemDTO(
                 stationeryItem.getId(),
                 stationeryItem.getType().toString(),
                 stationeryItem.getName(),
                 stationeryItem.getPrice(),
-                images.stream().filter(item -> item.getUuid().equals(stationeryItem.getUuid())).toList()
+                stationeryItem.getImages()
         );
     }
 

@@ -13,13 +13,7 @@ import java.util.List;
 public interface PhotocardMapper {
     PhotocardMapper INSTANCE = Mappers.getMapper(PhotocardMapper.class);
 
-    default PhotocardDTO photocardToDto(Photocard photocard, List<Image> images) {
-        return new PhotocardDTO(
-                photocard.getId(),
-                photocard.getType().toString(),
-                images.stream().filter(item -> item.getUuid().equals(photocard.getUuid())).findAny().get()
-        );
-    }
+    PhotocardDTO photocardToDto(Photocard photocard);
 
     Photocard DTOToPhotocard(PhotocardDTO photocardDTO);
 }

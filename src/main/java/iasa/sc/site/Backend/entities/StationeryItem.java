@@ -6,9 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -38,4 +41,7 @@ public class StationeryItem {
     @Column(name = "price", nullable = false)
     private int price;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "uuid", referencedColumnName = "uuid")
+    private List<Image> images;
 }

@@ -27,12 +27,10 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     public ResponseEntity<List<StationeryItemDTO>> getAllStationeryItems() {
-        List<Image> images = imageService.getAllImages();
-
         List<StationeryItemDTO> responseBody = stationeryRepository
                 .findAll()
                 .stream()
-                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, images))
+                .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO)
                 .toList();
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
@@ -40,11 +38,9 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     public ResponseEntity<StationeryItemDTO> getStationeryItemById(int id) {
-        List<Image> images = imageService.getAllImages();
-
         StationeryItemDTO responseBody = stationeryRepository
                 .findById(id)
-                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, images))
+                .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO)
                 .orElseThrow(UnknownIdException::new);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
