@@ -7,7 +7,7 @@ import iasa.sc.site.Backend.entities.enums.ClothesBaseColor;
 import iasa.sc.site.Backend.entities.enums.ClothesBaseSize;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -20,7 +20,7 @@ public class ClothesBaseInfoDto {
 
     private ClothesBaseSize clothesBaseSize;
 
-    private List<Image> imageList;
+    private Set<Image> imageList;
 
     private UUID uuid;
 
@@ -29,7 +29,7 @@ public class ClothesBaseInfoDto {
                               @JsonProperty("count_on_storage") Integer countOnStorage,
                               @JsonProperty("color") ClothesBaseColor color,
                               @JsonProperty("size") ClothesBaseSize clothesBaseSize,
-                              @JsonProperty("images") List<Image> imageList,
+                              @JsonProperty("images") Set<Image> imageList,
                               @JsonProperty("uuid") UUID uuid) {
         this.id = id;
         this.countOnStorage = countOnStorage;

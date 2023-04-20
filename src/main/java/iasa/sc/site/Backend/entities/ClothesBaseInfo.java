@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -49,4 +50,7 @@ public class ClothesBaseInfo {
     @JoinColumn(name = "clothes_base_id", unique = false, nullable = false)
     private ClothesBase base;
 
+    @OneToMany
+    @JoinColumn(name = "uuid", referencedColumnName = "uuid")
+    private Set<Image> images;
 }

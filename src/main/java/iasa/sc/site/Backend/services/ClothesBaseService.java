@@ -17,4 +17,6 @@ public interface ClothesBaseService {
     ResponseEntity<Void> deleteClothesBaseInfoById(String id);
 
     ResponseEntity<Void> deleteClothesBaseById(String id);
+
+    ResponseEntity<List<ClothesBaseInfoDto>> getAllClothesBasesInfo();
 }
