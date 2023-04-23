@@ -2,7 +2,6 @@ package iasa.sc.site.Backend.services.impl;
 
 import iasa.sc.site.Backend.dtos.PhotocardDTO;
 import iasa.sc.site.Backend.dtos.mappers.PhotocardMapper;
-import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.entities.Photocard;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;

@@ -2,7 +2,6 @@ package iasa.sc.site.Backend.services.impl;
 
 import iasa.sc.site.Backend.dtos.StationeryItemDTO;
 import iasa.sc.site.Backend.dtos.mappers.StationeryItemMapper;
-import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.entities.StationeryItem;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
@@ -47,6 +46,7 @@ public class StationeryServiceImpl implements StationeryService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> addStationeryItem(StationeryItemDTO stationeryItemDto, List<MultipartFile> images) {
         StationeryItem item;
 
@@ -56,9 +56,11 @@ public class StationeryServiceImpl implements StationeryService {
             throw new ValidationException();
         }
 
-        stationeryRepository.save(item);
+        item = stationeryRepository.save(item);
 
-        imageService.saveAllImages(images, item.getUuid());
+        if (images != null) {
+            imageService.saveAllImages(images, item.getUuid());
+        }
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
