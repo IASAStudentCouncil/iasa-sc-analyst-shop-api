@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/prints")
 @RequiredArgsConstructor
+@CrossOrigin
 public class PrintController {
     private final PrintService printService;
 

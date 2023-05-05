@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/clothes-bases")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ClothesBaseController {
     private final ClothesBaseService clothesBaseService;
 

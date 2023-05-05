@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/photocards")
 @RequiredArgsConstructor
+@CrossOrigin
 public class PhotocardController {
     private final PhotocardService photocardService;
 
