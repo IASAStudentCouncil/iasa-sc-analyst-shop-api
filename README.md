@@ -14,31 +14,21 @@ Database is located on Amazon S3. All images that are linked to entites are stor
 
 Entities: ClothesBase, Print, StationeryItem, Photocard
 
-## StationeryItem 
+## Stationery item 
 
 ### JSON
 
 ````
 {
-  "id": 0,
   "type": "STICKER",
   "name": "Yellow sticker",
-  "price": 0,
-  "images": [
-    {
-      "id": 0,
-      "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "image_url": "string"
-    }
-  ]
+  "price": 0
 }
 ````
 
 Types: *STICKER, STICKERPACK, NOTEBOOK, OTHER*
 
-Specify only *type* and *name*
-
-### HTTP methods
+### Endpoints
 
 * **GET:** */api/stationery*
 
@@ -48,7 +38,7 @@ Specify only *type* and *name*
 
 Send request as a form-data: JSON and images
 
-![post-request-example](https://user-images.githubusercontent.com/78265212/230292818-774fd50a-1791-4ea3-bcec-4f0e1f2aa6cd.png)
+![image](https://user-images.githubusercontent.com/78265212/236442820-2afd9f24-e1ae-4cf7-860c-c30dead7ea10.png)
   
 * **PUT** */api/stationery/{id}*
 
@@ -66,20 +56,12 @@ Adds images to existing entity
 
 ````
 {
-  "id": 0,
-  "type": "NEW",
-  "image": {
-    "id": 0,
-    "uuid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "image_url": "string"
-  }
+  "type": "NEW"
 }
 ````
 Types: *OUR_CLIENTS, NEW, ARCHIVE*
 
-Specify only *type*
-
-### HTTP methods
+### Endpoints
 
 * **GET:** */api/photocards*
 
@@ -89,7 +71,7 @@ Specify only *type*
 
 Send request as a form-data: JSON and image
 
-![image](https://user-images.githubusercontent.com/78265212/230295653-763a4a49-c377-42eb-b133-ce729a35a824.png)
+![image](https://user-images.githubusercontent.com/78265212/236442897-d93c55f9-7890-4f2d-be42-63f812cd2e29.png)
   
 * **PUT** */api/photocards/{id}*
 
