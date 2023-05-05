@@ -50,7 +50,7 @@ public class ClothesBaseInfo {
     @JoinColumn(name = "clothes_base_id", unique = false, nullable = false)
     private ClothesBase base;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "uuid", referencedColumnName = "uuid")
     private Set<Image> images;
 }

@@ -6,11 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -33,7 +32,7 @@ public class Photocard {
     @Enumerated(EnumType.STRING)
     private PhotocardType type;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "uuid", referencedColumnName = "uuid")
-    private Image image;
+    private List<Image> images;
 }

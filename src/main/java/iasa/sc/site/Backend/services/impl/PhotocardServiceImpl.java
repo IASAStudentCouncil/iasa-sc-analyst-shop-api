@@ -51,9 +51,12 @@ public class PhotocardServiceImpl implements PhotocardService {
         try {
             Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
 
-            photocardRepository.save(photocard);
+            photocard = photocardRepository.save(photocard);
 
-            imageService.saveImage(image, photocard.getUuid());
+            if (image != null) {
+                imageService.saveImage(image, photocard.getUuid());
+            }
+
         } catch (Exception e) {
             throw new ValidationException();
         }
@@ -64,9 +67,11 @@ public class PhotocardServiceImpl implements PhotocardService {
     @Override
     @Transactional
     public ResponseEntity<Void> deleteAllPhotocards() {
-        photocardRepository.deleteAll();
+        photocardRepository
+                .findAll()
+                .forEach(image -> imageService.deleteAllImagesByUUID(image.getUuid()));
 
-        imageService.deleteAllImages();
+        photocardRepository.deleteAll();
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -96,8 +101,10 @@ public class PhotocardServiceImpl implements PhotocardService {
             throw new ValidationException();
         }
 
-        imageService.deleteAllImagesByUUID(photocardEntity.getUuid());
-        imageService.saveImage(image, photocardEntity.getUuid());
+        if (image != null) {
+            imageService.deleteAllImagesByUUID(photocardEntity.getUuid());
+            imageService.saveImage(image, photocardEntity.getUuid());
+        }
 
         photocardRepository.save(photocardEntity);
 

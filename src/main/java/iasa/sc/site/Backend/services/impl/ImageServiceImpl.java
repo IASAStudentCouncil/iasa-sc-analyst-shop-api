@@ -6,6 +6,7 @@ import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.exceptions.UnexistingImageException;
 import iasa.sc.site.Backend.repositories.ImageRepository;
 import iasa.sc.site.Backend.services.ImageService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,6 +71,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
+    @Transactional
     public void deleteAllImagesByUUID(UUID uuid) {
         imageContainerClient
                 .listBlobs()

@@ -108,7 +108,9 @@ public class StationeryServiceImpl implements StationeryService {
 
         stationeryRepository.save(itemEntity);
 
-        imageService.saveAllImages(images, itemEntity.getUuid());
+        if (images != null) {
+            imageService.saveAllImages(images, itemEntity.getUuid());
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

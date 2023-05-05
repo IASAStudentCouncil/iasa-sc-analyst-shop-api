@@ -31,16 +31,16 @@ public class PhotocardController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addItem(@RequestPart("photocardDTO") PhotocardDTO photocardDTO,
-                                        @RequestPart("image") MultipartFile image) {
+    public ResponseEntity<Void> addItem(@RequestPart("photocard") PhotocardDTO photocardDTO,
+                                        @RequestPart(value = "image", required = false) MultipartFile image) {
         return photocardService.addNewPhotocard(photocardDTO, image);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> editItem(@PathVariable int id,
-                                         @RequestPart("photocardDTO") PhotocardDTO photocardDTO,
-                                         @RequestPart("image") MultipartFile image) {
+                                         @RequestPart("photocard") PhotocardDTO photocardDTO,
+                                         @RequestPart(value = "image", required = false) MultipartFile image) {
         return photocardService.updatePhotocardById(id, photocardDTO, image);
     }
 

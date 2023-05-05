@@ -36,7 +36,7 @@ public class StationeryItem {
     @Column(name = "price", nullable = false, unique = false)
     private int price;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "uuid", referencedColumnName = "uuid")
     private List<Image> images;
 }
