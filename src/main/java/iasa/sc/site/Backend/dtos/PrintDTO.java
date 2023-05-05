@@ -3,6 +3,7 @@ package iasa.sc.site.Backend.dtos;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import iasa.sc.site.Backend.entities.Image;
+import iasa.sc.site.Backend.entities.enums.PrintType;
 import lombok.Data;
 
 import java.util.List;
@@ -11,20 +12,16 @@ import java.util.List;
 public class PrintDTO {
     private final Integer id;
 
-    private final String printType;
+    private final PrintType printType;
 
-    private final List<Image> photosUrl;
-
-    private final String text;
+    private final List<Image> images;
 
     @JsonCreator
     public PrintDTO(@JsonProperty(value = "id") Integer id,
-                    @JsonProperty(value = "print_type") String printType,
-                    @JsonProperty(value = "text") String text,
-                    @JsonProperty(value = "photos_urls") List<Image> photosUrl) {
+                    @JsonProperty(value = "print_type") PrintType printType,
+                    @JsonProperty(value = "photos_urls") List<Image> images) {
         this.id = id;
-        this.text = text;
         this.printType = printType;
-        this.photosUrl = photosUrl;
+        this.images = images;
     }
 }

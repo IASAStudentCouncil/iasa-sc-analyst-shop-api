@@ -21,9 +21,6 @@ public class ClothesBase {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "text", unique = false, nullable = true)
-    private String text;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, unique = false)
     private ClothesBaseType type;

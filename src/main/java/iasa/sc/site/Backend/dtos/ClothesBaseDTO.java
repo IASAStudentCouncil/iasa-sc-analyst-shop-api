@@ -14,8 +14,6 @@ public class ClothesBaseDTO {
 
     private final ClothesBaseType type;
 
-    private final String text;
-
     private final Integer price;
 
     private final List<ClothesBaseInfoDTO> info;
@@ -24,12 +22,10 @@ public class ClothesBaseDTO {
     public ClothesBaseDTO(@JsonProperty("id") Integer id,
                           @JsonProperty("type") ClothesBaseType type,
                           @JsonProperty("price") Integer price,
-                          @JsonProperty("info") List<ClothesBaseInfoDTO> info,
-                          @JsonProperty("text") String text) {
+                          @JsonProperty("info") List<ClothesBaseInfoDTO> info) {
         this.id = id;
         this.type = type;
         this.price = price;
         this.info = info;
-        this.text = text;
     }
 }

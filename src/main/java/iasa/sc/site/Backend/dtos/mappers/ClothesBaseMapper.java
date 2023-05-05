@@ -19,8 +19,7 @@ public interface ClothesBaseMapper {
         return new ClothesBaseDTO(clothesBase.getId(),
                 clothesBase.getType(),
                 clothesBase.getPrice(),
-                clothesBase.getClothesBaseInfo().stream().map(this::clothesBaseInfoToClothesBaseInfoDto).collect(Collectors.toList())
-                , clothesBase.getText());
+                clothesBase.getClothesBaseInfo().stream().map(this::clothesBaseInfoToClothesBaseInfoDto).collect(Collectors.toList()));
     }
 
     ClothesBaseInfo clothesBaseInfoDTOToClothesBaseInfo(ClothesBaseInfoDTO clothesBaseInfoDto);
