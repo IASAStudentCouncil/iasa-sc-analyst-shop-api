@@ -1,6 +1,6 @@
 package iasa.sc.site.Backend.controllers;
 
-import iasa.sc.site.Backend.dtos.PrintDto;
+import iasa.sc.site.Backend.dtos.PrintDTO;
 import iasa.sc.site.Backend.services.PrintService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class PrintController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<PrintDto>> getAllPrints() {
+    public ResponseEntity<List<PrintDTO>> getAllPrints() {
         return printService.getAllPrints();
     }
 
@@ -31,21 +31,21 @@ public class PrintController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addPrint(@RequestPart("print") PrintDto printDto,
+    public ResponseEntity<Void> addPrint(@RequestPart("print") PrintDTO printDto,
                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return printService.addNewPrint(printDto, images);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<Void> updatePrint(@RequestPart("print") PrintDto printDto,
+    public ResponseEntity<Void> updatePrint(@RequestPart("print") PrintDTO printDto,
                                             @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return printService.updatePrint(printDto, images);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<PrintDto> getPrintById(@PathVariable("id") String printId) {
+    public ResponseEntity<PrintDTO> getPrintById(@PathVariable("id") String printId) {
         return printService.getPrintById(printId);
     }
 

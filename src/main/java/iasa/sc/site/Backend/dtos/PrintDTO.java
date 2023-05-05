@@ -6,30 +6,25 @@ import iasa.sc.site.Backend.entities.Image;
 import lombok.Data;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
-public class PrintDto {
-    private Integer id;
+public class PrintDTO {
+    private final Integer id;
 
-    private String printType;
+    private final String printType;
 
-    private List<Image> photosUrl;
+    private final List<Image> photosUrl;
 
-    private String text;
-
-    private UUID uuid;
+    private final String text;
 
     @JsonCreator
-    public PrintDto(@JsonProperty(value = "id") Integer id,
+    public PrintDTO(@JsonProperty(value = "id") Integer id,
                     @JsonProperty(value = "print_type") String printType,
                     @JsonProperty(value = "text") String text,
-                    @JsonProperty(value = "photos_urls") List<Image> photosUrl,
-                    @JsonProperty(value = "uuid") UUID uuid) {
+                    @JsonProperty(value = "photos_urls") List<Image> photosUrl) {
         this.id = id;
         this.text = text;
         this.printType = printType;
         this.photosUrl = photosUrl;
-        this.uuid = uuid;
     }
 }

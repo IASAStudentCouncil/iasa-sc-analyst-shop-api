@@ -10,21 +10,21 @@ import java.util.List;
 
 @Data
 public class ClothesBaseDTO {
-    private Integer id;
+    private final Integer id;
 
-    private ClothesBaseType type;
+    private final ClothesBaseType type;
 
-    private String text;
+    private final String text;
 
-    private Integer price;
+    private final Integer price;
 
-    private List<ClothesBaseInfoDto> info;
+    private final List<ClothesBaseInfoDTO> info;
 
     @JsonCreator
     public ClothesBaseDTO(@JsonProperty("id") Integer id,
                           @JsonProperty("type") ClothesBaseType type,
                           @JsonProperty("price") Integer price,
-                          @JsonProperty("info") List<ClothesBaseInfoDto> info,
+                          @JsonProperty("info") List<ClothesBaseInfoDTO> info,
                           @JsonProperty("text") String text) {
         this.id = id;
         this.type = type;
