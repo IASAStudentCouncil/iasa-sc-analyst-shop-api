@@ -20,41 +20,41 @@ public class PhotocardController {
     private final PhotocardService photocardService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<PhotocardDTO>> getAllPhotocards() {
-        return photocardService.getAllPhotocards();
+        List<PhotocardDTO> photocards = photocardService.getAllPhotocards();
+        return new ResponseEntity<>(photocards, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PhotocardDTO> getItemById(@PathVariable int id) {
-        return photocardService.getPhotocardById(id);
+        PhotocardDTO item = photocardService.getPhotocardById(id);
+        return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> addItem(@RequestPart("photocard") @Valid PhotocardDTO photocardDTO,
                                         @RequestPart(value = "image", required = false) MultipartFile image) {
-        return photocardService.addNewPhotocard(photocardDTO, image);
+        photocardService.addNewPhotocard(photocardDTO, image);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> editItem(@PathVariable int id,
                                          @RequestPart("photocard") @Valid PhotocardDTO photocardDTO,
                                          @RequestPart(value = "image", required = false) MultipartFile image) {
-        return photocardService.updatePhotocardById(id, photocardDTO, image);
+        photocardService.updatePhotocardById(id, photocardDTO, image);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteAllItems() {
-        return photocardService.deleteAllPhotocards();
+        photocardService.deleteAllPhotocards();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteItemById(@PathVariable int id) {
-        return photocardService.deletePhotocardById(id);
+        photocardService.deletePhotocardById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

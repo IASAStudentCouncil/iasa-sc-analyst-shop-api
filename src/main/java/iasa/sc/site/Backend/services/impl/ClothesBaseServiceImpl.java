@@ -12,9 +12,6 @@ import iasa.sc.site.Backend.repositories.ClothesBaseRepository;
 import iasa.sc.site.Backend.services.ClothesBaseService;
 import iasa.sc.site.Backend.services.ImageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,34 +23,27 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ClothesBaseServiceImpl implements ClothesBaseService {
     private final ClothesBaseRepository clothesBaseRepository;
-
     private final ClothesBaseInfoRepository clothesBaseInfoRepository;
-
     private final ImageService imageService;
 
     @Override
-    public ResponseEntity<List<ClothesBaseDTO>> getAllClothesBases() {
-        List<ClothesBase> responseBody = clothesBaseRepository
-                .findAll();
-        List<ClothesBaseDTO> dtos = responseBody
-                .stream()
+    public List<ClothesBaseDTO> getAllClothesBases() {
+        List<ClothesBase> responseBody = clothesBaseRepository.findAll();
+        return responseBody.stream()
                 .map(ClothesBaseMapper.INSTANCE::clothesBaseToClothesBaseDto)
                 .toList();
-        return ResponseEntity.ok(dtos);
     }
 
     @Override
-    public ResponseEntity<ClothesBaseDTO> getClothesBaseById(String id) {
-        ClothesBase clothesBase = clothesBaseRepository
-                .findById(Integer.parseInt(id))
+    public ClothesBaseDTO getClothesBaseById(String id) {
+        ClothesBase clothesBase = clothesBaseRepository.findById(Integer.parseInt(id))
                 .orElseThrow(() -> new NoSuchElementException("No element with this id in database"));
-        ClothesBaseDTO clothesBaseDTO = ClothesBaseMapper.INSTANCE.clothesBaseToClothesBaseDto(clothesBase);
-        return new ResponseEntity<>(clothesBaseDTO, HttpStatus.OK);
+        return ClothesBaseMapper.INSTANCE.clothesBaseToClothesBaseDto(clothesBase);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<Void> createClothesBase(ClothesBaseDTO clothesBaseDTO, ClothesBaseInfoDTO clothesBaseInfoDto, List<MultipartFile> images) {
+    public void createClothesBase(ClothesBaseDTO clothesBaseDTO, ClothesBaseInfoDTO clothesBaseInfoDto, List<MultipartFile> images) {
         try {
             ClothesBase clothesBase = ClothesBaseMapper.INSTANCE.clothesBaseDTOToClothesBase(clothesBaseDTO);
             ClothesBaseInfo clothesBaseInfo = ClothesBaseMapper.INSTANCE.clothesBaseInfoDTOToClothesBaseInfo(clothesBaseInfoDto);
@@ -66,38 +56,33 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
         } catch (Exception e) {
             throw new ValidationException("Bad fields in request");
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
     @Transactional
-    public ResponseEntity<Void> deleteClothesBaseById(String id) {
+    public void deleteClothesBaseById(String id) {
         try {
             clothesBaseInfoRepository.deleteAllByClothesBaseId(id);
             clothesBaseRepository.deleteById(Integer.parseInt(id));
         } catch (Exception e) {
             throw new UnknownIdException("No item with this id in database");
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<Void> deleteClothesBaseInfoById(String id) {
+    public void deleteClothesBaseInfoById(String id) {
         try {
             clothesBaseInfoRepository.deleteById(Integer.parseInt(id));
         } catch (Exception e) {
             throw new UnknownIdException("No item with this id in database");
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<List<ClothesBaseInfoDTO>> getAllClothesBasesInfo() {
-        List<ClothesBaseInfoDTO> body = clothesBaseInfoRepository
-                .findAll()
+    public List<ClothesBaseInfoDTO> getAllClothesBasesInfo() {
+        return clothesBaseInfoRepository.findAll()
                 .stream()
                 .map(ClothesBaseMapper.INSTANCE::clothesBaseInfoToClothesBaseInfoDto)
                 .toList();
-        return new ResponseEntity<>(body, HttpStatusCode.valueOf(200));
     }
 }
