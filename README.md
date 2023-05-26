@@ -8,7 +8,7 @@ Swagger documentation
 
 ## System design diagram :bulb:
 
-![IASA_Analyst_Shop_System_design_diagram](https://github.com/IASAStudentCouncil/iasa-sc-analyst-shop-api/assets/78265212/19a6f1ae-87b8-482c-9aab-583b6c72ac2e)
+![IASA_Analyst_Shop_System_design_diagram](https://github.com/IASAStudentCouncil/iasa-sc-analyst-shop-api/assets/78265212/b44b304a-cfcf-4eaf-a4e8-08be633d7b2f)
 
 ## Stationery item 
 
