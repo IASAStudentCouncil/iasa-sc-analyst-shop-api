@@ -2,6 +2,7 @@ package iasa.sc.site.Backend.controllers;
 
 import iasa.sc.site.Backend.dtos.PrintDTO;
 import iasa.sc.site.Backend.services.PrintService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,14 +33,14 @@ public class PrintController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addPrint(@RequestPart("print") PrintDTO printDto,
+    public ResponseEntity<Void> addPrint(@RequestPart("print") @Valid PrintDTO printDto,
                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return printService.addNewPrint(printDto, images);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<Void> updatePrint(@RequestPart("print") PrintDTO printDto,
+    public ResponseEntity<Void> updatePrint(@RequestPart("print") @Valid PrintDTO printDto,
                                             @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return printService.updatePrint(printDto, images);
     }

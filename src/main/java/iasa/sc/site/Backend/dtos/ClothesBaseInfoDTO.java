@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.entities.enums.ClothesBaseColor;
 import iasa.sc.site.Backend.entities.enums.ClothesBaseSize;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Set;
@@ -13,10 +15,13 @@ import java.util.Set;
 public class ClothesBaseInfoDTO {
     private final Integer id;
 
+    @Min(value = 0, message = "count on storage must be greater than or equal to zero")
     private final Integer countOnStorage;
 
+    @NotNull(message = "color is required")
     private final ClothesBaseColor color;
 
+    @NotNull(message = "size is required")
     private final ClothesBaseSize clothesBaseSize;
 
     private final Set<Image> images;

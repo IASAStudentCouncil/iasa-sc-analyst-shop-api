@@ -2,6 +2,7 @@ package iasa.sc.site.Backend.controllers;
 
 import iasa.sc.site.Backend.dtos.StationeryItemDTO;
 import iasa.sc.site.Backend.services.StationeryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,7 +33,7 @@ public class StationeryController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addItem(@RequestPart("stationery_item") StationeryItemDTO stationeryItemDTO,
+    public ResponseEntity<Void> addItem(@RequestPart("stationery_item") @Valid StationeryItemDTO stationeryItemDTO,
                                         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return stationeryService.addStationeryItem(stationeryItemDTO, images);
     }
@@ -40,7 +41,7 @@ public class StationeryController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> editItem(@PathVariable int id,
-                                         @RequestPart("stationery_item") StationeryItemDTO stationeryItemDTO,
+                                         @RequestPart("stationery_item") @Valid StationeryItemDTO stationeryItemDTO,
                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return stationeryService.updateStationeryItemById(id, stationeryItemDTO, images);
     }
