@@ -1,6 +1,6 @@
 package iasa.sc.site.Backend.services.impl;
 
-import iasa.sc.site.Backend.dtos.PrintDto;
+import iasa.sc.site.Backend.dtos.PrintDTO;
 import iasa.sc.site.Backend.dtos.mappers.PrintMapper;
 import iasa.sc.site.Backend.entities.Print;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
@@ -27,8 +27,8 @@ public class PrintServiceImpl implements PrintService {
     private final ImageService imageService;
 
     @Override
-    public ResponseEntity<List<PrintDto>> getAllPrints() {
-        List<PrintDto> responseBody = printRepository
+    public ResponseEntity<List<PrintDTO>> getAllPrints() {
+        List<PrintDTO> responseBody = printRepository
                 .findAll()
                 .stream()
                 .map(PrintMapper.INSTANCE::printToDto)
@@ -50,7 +50,7 @@ public class PrintServiceImpl implements PrintService {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> addNewPrint(PrintDto printDto, List<MultipartFile> images) {
+    public ResponseEntity<Void> addNewPrint(PrintDTO printDto, List<MultipartFile> images) {
         try {
             Print inputPrint = PrintMapper.INSTANCE.printDtoToPrint(printDto);
             inputPrint = printRepository.save(inputPrint);
@@ -64,7 +64,7 @@ public class PrintServiceImpl implements PrintService {
     }
 
     @Override
-    public ResponseEntity<Void> updatePrint(PrintDto printDto, List<MultipartFile> images) {
+    public ResponseEntity<Void> updatePrint(PrintDTO printDto, List<MultipartFile> images) {
         try {
             Print print = PrintMapper.INSTANCE.printDtoToPrint(printDto);
             print = printRepository.save(print);
@@ -78,7 +78,7 @@ public class PrintServiceImpl implements PrintService {
     }
 
     @Override
-    public ResponseEntity<PrintDto> getPrintById(String id) {
+    public ResponseEntity<PrintDTO> getPrintById(String id) {
         try {
             return ResponseEntity.ok(PrintMapper.INSTANCE
                     .printToDto(printRepository

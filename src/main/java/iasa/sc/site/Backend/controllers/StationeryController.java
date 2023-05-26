@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/stationery")
 @RequiredArgsConstructor
+@CrossOrigin
 public class StationeryController {
     private final StationeryService stationeryService;
 
@@ -31,16 +32,16 @@ public class StationeryController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addItem(@RequestPart("stationeryItemDTO") StationeryItemDTO stationeryItemDTO,
-                                        @RequestPart("images") List<MultipartFile> images) {
+    public ResponseEntity<Void> addItem(@RequestPart("stationery_item") StationeryItemDTO stationeryItemDTO,
+                                        @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return stationeryService.addStationeryItem(stationeryItemDTO, images);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> editItem(@PathVariable int id,
-                                         @RequestPart("stationeryItemDTO") StationeryItemDTO stationeryItemDTO,
-                                         @RequestPart("images") List<MultipartFile> images) {
+                                         @RequestPart("stationery_item") StationeryItemDTO stationeryItemDTO,
+                                         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return stationeryService.updateStationeryItemById(id, stationeryItemDTO, images);
     }
 

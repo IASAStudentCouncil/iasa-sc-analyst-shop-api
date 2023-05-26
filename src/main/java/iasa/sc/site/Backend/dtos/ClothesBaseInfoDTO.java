@@ -8,34 +8,29 @@ import iasa.sc.site.Backend.entities.enums.ClothesBaseSize;
 import lombok.Data;
 
 import java.util.Set;
-import java.util.UUID;
 
 @Data
-public class ClothesBaseInfoDto {
-    private Integer id;
+public class ClothesBaseInfoDTO {
+    private final Integer id;
 
-    private Integer countOnStorage;
+    private final Integer countOnStorage;
 
-    private ClothesBaseColor color;
+    private final ClothesBaseColor color;
 
-    private ClothesBaseSize clothesBaseSize;
+    private final ClothesBaseSize clothesBaseSize;
 
-    private Set<Image> imageList;
-
-    private UUID uuid;
+    private final Set<Image> images;
 
     @JsonCreator
-    public ClothesBaseInfoDto(@JsonProperty("id") Integer id,
+    public ClothesBaseInfoDTO(@JsonProperty("id") Integer id,
                               @JsonProperty("count_on_storage") Integer countOnStorage,
                               @JsonProperty("color") ClothesBaseColor color,
                               @JsonProperty("size") ClothesBaseSize clothesBaseSize,
-                              @JsonProperty("images") Set<Image> imageList,
-                              @JsonProperty("uuid") UUID uuid) {
+                              @JsonProperty("images") Set<Image> images) {
         this.id = id;
         this.countOnStorage = countOnStorage;
         this.color = color;
         this.clothesBaseSize = clothesBaseSize;
-        this.imageList = imageList;
-        this.uuid = uuid;
+        this.images = images;
     }
 }

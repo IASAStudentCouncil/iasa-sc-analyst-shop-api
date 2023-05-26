@@ -2,7 +2,6 @@ package iasa.sc.site.Backend.services.impl;
 
 import iasa.sc.site.Backend.dtos.StationeryItemDTO;
 import iasa.sc.site.Backend.dtos.mappers.StationeryItemMapper;
-import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.entities.StationeryItem;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
@@ -27,12 +26,10 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     public ResponseEntity<List<StationeryItemDTO>> getAllStationeryItems() {
-        List<Image> images = imageService.getAllImages();
-
         List<StationeryItemDTO> responseBody = stationeryRepository
                 .findAll()
                 .stream()
-                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, images))
+                .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO)
                 .toList();
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
@@ -40,17 +37,16 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     public ResponseEntity<StationeryItemDTO> getStationeryItemById(int id) {
-        List<Image> images = imageService.getAllImages();
-
         StationeryItemDTO responseBody = stationeryRepository
                 .findById(id)
-                .map(item -> StationeryItemMapper.INSTANCE.stationeryItemToDTO(item, images))
+                .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO)
                 .orElseThrow(UnknownIdException::new);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Void> addStationeryItem(StationeryItemDTO stationeryItemDto, List<MultipartFile> images) {
         StationeryItem item;
 
@@ -60,9 +56,11 @@ public class StationeryServiceImpl implements StationeryService {
             throw new ValidationException();
         }
 
-        stationeryRepository.save(item);
+        item = stationeryRepository.save(item);
 
-        imageService.saveAllImages(images, item.getUuid());
+        if (images != null) {
+            imageService.saveAllImages(images, item.getUuid());
+        }
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -110,7 +108,9 @@ public class StationeryServiceImpl implements StationeryService {
 
         stationeryRepository.save(itemEntity);
 
-        imageService.saveAllImages(images, itemEntity.getUuid());
+        if (images != null) {
+            imageService.saveAllImages(images, itemEntity.getUuid());
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

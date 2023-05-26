@@ -1,5 +1,6 @@
 package iasa.sc.site.Backend.dtos;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import iasa.sc.site.Backend.entities.Image;
 import lombok.Data;
@@ -18,6 +19,7 @@ public class StationeryItemDTO {
 
     private final List<Image> images;
 
+    @JsonCreator
     public StationeryItemDTO(@JsonProperty("id") Integer id,
                              @JsonProperty("type") String type,
                              @JsonProperty("name") String name,

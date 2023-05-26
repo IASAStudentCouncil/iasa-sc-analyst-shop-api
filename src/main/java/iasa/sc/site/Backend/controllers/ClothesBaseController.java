@@ -1,7 +1,7 @@
 package iasa.sc.site.Backend.controllers;
 
 import iasa.sc.site.Backend.dtos.ClothesBaseDTO;
-import iasa.sc.site.Backend.dtos.ClothesBaseInfoDto;
+import iasa.sc.site.Backend.dtos.ClothesBaseInfoDTO;
 import iasa.sc.site.Backend.services.ClothesBaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/clothes-bases")
 @RequiredArgsConstructor
+@CrossOrigin
 public class ClothesBaseController {
     private final ClothesBaseService clothesBaseService;
 
@@ -33,7 +34,7 @@ public class ClothesBaseController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> createClothesBase(@RequestPart("clothes_base") ClothesBaseDTO clothesBaseDto,
-                                                  @RequestPart("clothes_base_info") ClothesBaseInfoDto clothesBaseInfoDto,
+                                                  @RequestPart("clothes_base_info") ClothesBaseInfoDTO clothesBaseInfoDto,
                                                   @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         return clothesBaseService.createClothesBase(clothesBaseDto, clothesBaseInfoDto, images);
     }
@@ -51,7 +52,7 @@ public class ClothesBaseController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<List<ClothesBaseInfoDto>> getAllClothesBasesInfo() {
+    public ResponseEntity<List<ClothesBaseInfoDTO>> getAllClothesBasesInfo() {
         return clothesBaseService.getAllClothesBasesInfo();
     }
 }

@@ -32,10 +32,7 @@ public class Print {
     @Column(name = "type", nullable = false, unique = false)
     private PrintType printType;
 
-    @Column(name = "text", nullable = true, unique = false)
-    private String text;
-
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "uuid", referencedColumnName = "uuid")
     private List<Image> images;
 }

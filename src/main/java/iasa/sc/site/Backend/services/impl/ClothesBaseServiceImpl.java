@@ -1,7 +1,7 @@
 package iasa.sc.site.Backend.services.impl;
 
 import iasa.sc.site.Backend.dtos.ClothesBaseDTO;
-import iasa.sc.site.Backend.dtos.ClothesBaseInfoDto;
+import iasa.sc.site.Backend.dtos.ClothesBaseInfoDTO;
 import iasa.sc.site.Backend.dtos.mappers.ClothesBaseMapper;
 import iasa.sc.site.Backend.entities.ClothesBase;
 import iasa.sc.site.Backend.entities.ClothesBaseInfo;
@@ -53,7 +53,7 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
 
     @Override
     @Transactional
-    public ResponseEntity<Void> createClothesBase(ClothesBaseDTO clothesBaseDTO, ClothesBaseInfoDto clothesBaseInfoDto, List<MultipartFile> images) {
+    public ResponseEntity<Void> createClothesBase(ClothesBaseDTO clothesBaseDTO, ClothesBaseInfoDTO clothesBaseInfoDto, List<MultipartFile> images) {
         try {
             ClothesBase clothesBase = ClothesBaseMapper.INSTANCE.clothesBaseDTOToClothesBase(clothesBaseDTO);
             ClothesBaseInfo clothesBaseInfo = ClothesBaseMapper.INSTANCE.clothesBaseInfoDTOToClothesBaseInfo(clothesBaseInfoDto);
@@ -92,8 +92,8 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
     }
 
     @Override
-    public ResponseEntity<List<ClothesBaseInfoDto>> getAllClothesBasesInfo() {
-        List<ClothesBaseInfoDto> body = clothesBaseInfoRepository
+    public ResponseEntity<List<ClothesBaseInfoDTO>> getAllClothesBasesInfo() {
+        List<ClothesBaseInfoDTO> body = clothesBaseInfoRepository
                 .findAll()
                 .stream()
                 .map(ClothesBaseMapper.INSTANCE::clothesBaseInfoToClothesBaseInfoDto)

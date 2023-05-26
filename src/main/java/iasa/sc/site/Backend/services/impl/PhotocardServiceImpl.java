@@ -2,7 +2,6 @@ package iasa.sc.site.Backend.services.impl;
 
 import iasa.sc.site.Backend.dtos.PhotocardDTO;
 import iasa.sc.site.Backend.dtos.mappers.PhotocardMapper;
-import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.entities.Photocard;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
@@ -27,12 +26,10 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     @Override
     public ResponseEntity<List<PhotocardDTO>> getAllPhotocards() {
-        List<Image> images = imageService.getAllImages();
-
         List<PhotocardDTO> responseBody = photocardRepository
                 .findAll()
                 .stream()
-                .map(photocard -> PhotocardMapper.INSTANCE.photocardToDto(photocard, images))
+                .map(PhotocardMapper.INSTANCE::photocardToDto)
                 .toList();
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
@@ -40,11 +37,9 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     @Override
     public ResponseEntity<PhotocardDTO> getPhotocardById(int id) {
-        List<Image> images = imageService.getAllImages();
-
         PhotocardDTO responseBody = photocardRepository
                 .findById(id)
-                .map(photocard -> PhotocardMapper.INSTANCE.photocardToDto(photocard, images))
+                .map(PhotocardMapper.INSTANCE::photocardToDto)
                 .orElseThrow(UnknownIdException::new);
 
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
@@ -56,9 +51,12 @@ public class PhotocardServiceImpl implements PhotocardService {
         try {
             Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
 
-            photocardRepository.save(photocard);
+            photocard = photocardRepository.save(photocard);
 
-            imageService.saveImage(image, photocard.getUuid());
+            if (image != null) {
+                imageService.saveImage(image, photocard.getUuid());
+            }
+
         } catch (Exception e) {
             throw new ValidationException();
         }
@@ -69,9 +67,11 @@ public class PhotocardServiceImpl implements PhotocardService {
     @Override
     @Transactional
     public ResponseEntity<Void> deleteAllPhotocards() {
-        photocardRepository.deleteAll();
+        photocardRepository
+                .findAll()
+                .forEach(image -> imageService.deleteAllImagesByUUID(image.getUuid()));
 
-        imageService.deleteAllImages();
+        photocardRepository.deleteAll();
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -101,8 +101,10 @@ public class PhotocardServiceImpl implements PhotocardService {
             throw new ValidationException();
         }
 
-        imageService.deleteAllImagesByUUID(photocardEntity.getUuid());
-        imageService.saveImage(image, photocardEntity.getUuid());
+        if (image != null) {
+            imageService.deleteAllImagesByUUID(photocardEntity.getUuid());
+            imageService.saveImage(image, photocardEntity.getUuid());
+        }
 
         photocardRepository.save(photocardEntity);
 

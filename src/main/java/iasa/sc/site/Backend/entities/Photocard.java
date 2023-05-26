@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,4 +31,8 @@ public class Photocard {
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private PhotocardType type;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "uuid", referencedColumnName = "uuid")
+    private List<Image> images;
 }

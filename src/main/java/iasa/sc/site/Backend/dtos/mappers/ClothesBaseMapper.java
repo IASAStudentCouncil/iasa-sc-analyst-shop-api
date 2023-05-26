@@ -1,7 +1,7 @@
 package iasa.sc.site.Backend.dtos.mappers;
 
 import iasa.sc.site.Backend.dtos.ClothesBaseDTO;
-import iasa.sc.site.Backend.dtos.ClothesBaseInfoDto;
+import iasa.sc.site.Backend.dtos.ClothesBaseInfoDTO;
 import iasa.sc.site.Backend.entities.ClothesBase;
 import iasa.sc.site.Backend.entities.ClothesBaseInfo;
 import org.mapstruct.Mapper;
@@ -19,18 +19,16 @@ public interface ClothesBaseMapper {
         return new ClothesBaseDTO(clothesBase.getId(),
                 clothesBase.getType(),
                 clothesBase.getPrice(),
-                clothesBase.getClothesBaseInfo().stream().map(this::clothesBaseInfoToClothesBaseInfoDto).collect(Collectors.toList())
-                , clothesBase.getText());
+                clothesBase.getClothesBaseInfo().stream().map(this::clothesBaseInfoToClothesBaseInfoDto).collect(Collectors.toList()));
     }
 
-    ClothesBaseInfo clothesBaseInfoDTOToClothesBaseInfo(ClothesBaseInfoDto clothesBaseInfoDto);
+    ClothesBaseInfo clothesBaseInfoDTOToClothesBaseInfo(ClothesBaseInfoDTO clothesBaseInfoDto);
 
-    default ClothesBaseInfoDto clothesBaseInfoToClothesBaseInfoDto(ClothesBaseInfo clothesBaseInfo) {
-        return new ClothesBaseInfoDto(clothesBaseInfo.getId(),
+    default ClothesBaseInfoDTO clothesBaseInfoToClothesBaseInfoDto(ClothesBaseInfo clothesBaseInfo) {
+        return new ClothesBaseInfoDTO(clothesBaseInfo.getId(),
                 clothesBaseInfo.getCountOnStorage(),
                 clothesBaseInfo.getColor(),
                 clothesBaseInfo.getClothesBaseSize(),
-                clothesBaseInfo.getImages(),
-                clothesBaseInfo.getUuid());
+                clothesBaseInfo.getImages());
     }
 }
