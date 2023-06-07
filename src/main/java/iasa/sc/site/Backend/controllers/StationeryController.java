@@ -2,6 +2,7 @@ package iasa.sc.site.Backend.controllers;
 
 import iasa.sc.site.Backend.dtos.StationeryItemDTO;
 import iasa.sc.site.Backend.services.StationeryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,41 +20,41 @@ public class StationeryController {
     private final StationeryService stationeryService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<StationeryItemDTO>> getAllStationeryItems() {
-        return stationeryService.getAllStationeryItems();
+        List<StationeryItemDTO> items = stationeryService.getAllStationeryItems();
+        return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<StationeryItemDTO> getItemById(@PathVariable int id) {
-        return stationeryService.getStationeryItemById(id);
+        StationeryItemDTO item = stationeryService.getStationeryItemById(id);
+        return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addItem(@RequestPart("stationery_item") StationeryItemDTO stationeryItemDTO,
+    public ResponseEntity<Void> addItem(@RequestPart("stationery_item") @Valid StationeryItemDTO stationeryItemDTO,
                                         @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        return stationeryService.addStationeryItem(stationeryItemDTO, images);
+        stationeryService.addStationeryItem(stationeryItemDTO, images);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> editItem(@PathVariable int id,
-                                         @RequestPart("stationery_item") StationeryItemDTO stationeryItemDTO,
+                                         @RequestPart("stationery_item") @Valid StationeryItemDTO stationeryItemDTO,
                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        return stationeryService.updateStationeryItemById(id, stationeryItemDTO, images);
+        stationeryService.updateStationeryItemById(id, stationeryItemDTO, images);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteAllItems() {
-        return stationeryService.deleteAllStationeryItems();
+        stationeryService.deleteAllStationeryItems();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteItemById(@PathVariable int id) {
-        return stationeryService.deleteStationeryItemById(id);
+        stationeryService.deleteStationeryItemById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

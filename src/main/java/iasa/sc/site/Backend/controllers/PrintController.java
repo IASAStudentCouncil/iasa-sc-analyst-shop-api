@@ -2,6 +2,7 @@ package iasa.sc.site.Backend.controllers;
 
 import iasa.sc.site.Backend.dtos.PrintDTO;
 import iasa.sc.site.Backend.services.PrintService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,40 +20,40 @@ public class PrintController {
     private final PrintService printService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<PrintDTO>> getAllPrints() {
-        return printService.getAllPrints();
+        List<PrintDTO> prints = printService.getAllPrints();
+        return new ResponseEntity<>(prints, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deletePrint(@PathVariable("id") String id) {
-        return printService.deletePrintById(id);
+        printService.deletePrintById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Void> addPrint(@RequestPart("print") PrintDTO printDto,
+    public ResponseEntity<Void> addPrint(@RequestPart("print") @Valid PrintDTO printDto,
                                          @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        return printService.addNewPrint(printDto, images);
+        printService.addNewPrint(printDto, images);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<Void> updatePrint(@RequestPart("print") PrintDTO printDto,
+    public ResponseEntity<Void> updatePrint(@RequestPart("print") @Valid PrintDTO printDto,
                                             @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        return printService.updatePrint(printDto, images);
+        printService.updatePrint(printDto, images);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PrintDTO> getPrintById(@PathVariable("id") String printId) {
-        return printService.getPrintById(printId);
+        PrintDTO item = printService.getPrintById(printId);
+        return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
     @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteAllPrints() {
-        return printService.deleteAllPrints();
+        printService.deleteAllPrints();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

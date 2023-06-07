@@ -10,8 +10,6 @@ import iasa.sc.site.Backend.services.ImageService;
 import iasa.sc.site.Backend.services.PhotocardService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,93 +19,69 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PhotocardServiceImpl implements PhotocardService {
     private final PhotocardRepository photocardRepository;
-
     private final ImageService imageService;
 
     @Override
-    public ResponseEntity<List<PhotocardDTO>> getAllPhotocards() {
-        List<PhotocardDTO> responseBody = photocardRepository
+    public List<PhotocardDTO> getAllPhotocards() {
+        return photocardRepository
                 .findAll()
                 .stream()
                 .map(PhotocardMapper.INSTANCE::photocardToDto)
                 .toList();
-
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<PhotocardDTO> getPhotocardById(int id) {
-        PhotocardDTO responseBody = photocardRepository
+    public PhotocardDTO getPhotocardById(int id) {
+        return photocardRepository
                 .findById(id)
                 .map(PhotocardMapper.INSTANCE::photocardToDto)
                 .orElseThrow(UnknownIdException::new);
-
-        return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
 
     @Override
-    public ResponseEntity<Void> addNewPhotocard(PhotocardDTO photocardDTO, MultipartFile image) {
-
+    public void addNewPhotocard(PhotocardDTO photocardDTO, MultipartFile image) {
         try {
             Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
-
             photocard = photocardRepository.save(photocard);
-
             if (image != null) {
                 imageService.saveImage(image, photocard.getUuid());
             }
-
         } catch (Exception e) {
             throw new ValidationException();
         }
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
     @Transactional
-    public ResponseEntity<Void> deleteAllPhotocards() {
+    public void deleteAllPhotocards() {
         photocardRepository
                 .findAll()
                 .forEach(image -> imageService.deleteAllImagesByUUID(image.getUuid()));
-
         photocardRepository.deleteAll();
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
     @Transactional
-    public ResponseEntity<Void> deletePhotocardById(int itemId) {
+    public void deletePhotocardById(int itemId) {
         Photocard photocard = photocardRepository.findById(itemId).orElseThrow(UnknownIdException::new);
-
         photocardRepository.delete(photocard);
-
         imageService.deleteAllImagesByUUID(photocard.getUuid());
-
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @Override
     @Transactional
-    public ResponseEntity<Void> updatePhotocardById(int photocardId, PhotocardDTO photocardDTO, MultipartFile image) {
+    public void updatePhotocardById(int photocardId, PhotocardDTO photocardDTO, MultipartFile image) {
         Photocard photocardEntity = photocardRepository.findById(photocardId).orElseThrow(UnknownIdException::new);
-
         try {
             Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
-
             photocardEntity.setType(photocard.getType());
         } catch (Exception e) {
             throw new ValidationException();
         }
-
         if (image != null) {
             imageService.deleteAllImagesByUUID(photocardEntity.getUuid());
             imageService.saveImage(image, photocardEntity.getUuid());
         }
-
         photocardRepository.save(photocardEntity);
-
-        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
