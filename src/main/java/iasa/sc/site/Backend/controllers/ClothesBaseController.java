@@ -21,8 +21,11 @@ public class ClothesBaseController {
     private final ClothesBaseService clothesBaseService;
 
     @GetMapping
-    public ResponseEntity<List<ClothesBaseDTO>> getAllClothesBases() {
-        return new ResponseEntity<>(clothesBaseService.getAllClothesBases(), HttpStatus.OK);
+    public ResponseEntity<List<ClothesBaseDTO>> getAllClothesBases(
+            @RequestParam(defaultValue = "0", name = "offset") String offset,
+            @RequestParam(defaultValue = "10", name = "limit") String limit,
+            @RequestParam(defaultValue = "TSHIRTS", name = "type") String type) {
+        return new ResponseEntity<>(clothesBaseService.getAllClothesBasesByType(type, offset, limit), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
