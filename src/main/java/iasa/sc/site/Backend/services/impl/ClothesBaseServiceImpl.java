@@ -12,6 +12,8 @@ import iasa.sc.site.Backend.repositories.ClothesBaseRepository;
 import iasa.sc.site.Backend.services.ClothesBaseService;
 import iasa.sc.site.Backend.services.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +25,9 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class ClothesBaseServiceImpl implements ClothesBaseService {
     private final ClothesBaseRepository clothesBaseRepository;
+
     private final ClothesBaseInfoRepository clothesBaseInfoRepository;
+
     private final ImageService imageService;
 
     @Override
@@ -83,6 +87,18 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
         return clothesBaseInfoRepository.findAll()
                 .stream()
                 .map(ClothesBaseMapper.INSTANCE::clothesBaseInfoToClothesBaseInfoDto)
+                .toList();
+    }
+
+    @Override
+    public List<ClothesBaseDTO> getAllClothesBasesByType(String type, String offset, String limit) {
+        int pageNumber = Integer.parseInt(offset);
+        int pageSize = Integer.parseInt(limit);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return clothesBaseRepository
+                .findByType(type, pageable)
+                .stream()
+                .map(ClothesBaseMapper.INSTANCE::clothesBaseToClothesBaseDto)
                 .toList();
     }
 }

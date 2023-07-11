@@ -18,4 +18,6 @@ public interface ClothesBaseService {
     void deleteClothesBaseById(String id);
 
     List<ClothesBaseInfoDTO> getAllClothesBasesInfo();
+
+    List<ClothesBaseDTO> getAllClothesBasesByType(String type, String offset, String limit);
 }

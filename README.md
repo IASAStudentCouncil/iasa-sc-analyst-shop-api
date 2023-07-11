@@ -1,18 +1,14 @@
-# IASA SC Analyst Shop API
-**IASA student council analyst shop backend**
+## IASA SC Analyst Shop API
+*Selling merchandise*
 
 ## Stack :computer:
-Java, Spring Boot, Spring Data JPA, Spring Cloud, PostgreSQL
+Java, Spring Boot, Spring Data, Azure Blob storage, PostgreSQL
 
 Swagger documentation
 
-## Implementation details :bulb:
-Database is located on Amazon S3. All images that are linked to entites are stored in Azure Blob storage. 
+## System design diagram :bulb:
 
-## Analyst shop :shirt:
-*Selling merchandise*
-
-Entities: ClothesBase, Print, StationeryItem, Photocard
+![IASA_Analyst_Shop_System_design_diagram](https://github.com/IASAStudentCouncil/iasa-sc-analyst-shop-api/assets/78265212/b44b304a-cfcf-4eaf-a4e8-08be633d7b2f)
 
 ## Stationery item 
 
