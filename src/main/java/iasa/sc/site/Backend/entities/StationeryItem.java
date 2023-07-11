@@ -20,7 +20,7 @@ public class StationeryItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
-    private Integer Id;
+    private Integer id;
 
     @Column(name = "uuid", nullable = false, unique = true, columnDefinition = "uuid")
     @Generated(value = GenerationTime.INSERT)
