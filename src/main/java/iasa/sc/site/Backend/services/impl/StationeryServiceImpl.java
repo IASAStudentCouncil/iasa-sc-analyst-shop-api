@@ -51,8 +51,8 @@ public class StationeryServiceImpl implements StationeryService {
             throw new ValidationException();
         }
 
-        item = stationeryRepository.save(item);
         item.setUuid(UUID.randomUUID());
+        item = stationeryRepository.save(item);
 
         if (images != null) {
             imageService.saveAllImages(images, item.getUuid());
