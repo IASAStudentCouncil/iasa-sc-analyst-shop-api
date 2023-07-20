@@ -5,8 +5,6 @@ import iasa.sc.site.Backend.entities.Image;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public class PhotocardDTO {
     private final Integer id;
@@ -14,13 +12,13 @@ public class PhotocardDTO {
     @NotNull(message = "type is required")
     private final String type;
 
-    private final List<Image> images;
+    private final Image image;
 
     public PhotocardDTO(@JsonProperty("id") Integer id,
                         @JsonProperty("type") String type,
-                        @JsonProperty("image") List<Image> images) {
+                        @JsonProperty("image") Image image) {
         this.id = id;
         this.type = type;
-        this.images = images;
+        this.image = image;
     }
 }

@@ -26,9 +26,9 @@ public interface ClothesBaseMapper {
 
     default ClothesBaseInfoDTO clothesBaseInfoToClothesBaseInfoDto(ClothesBaseInfo clothesBaseInfo) {
         return new ClothesBaseInfoDTO(clothesBaseInfo.getId(),
-                clothesBaseInfo.getCountOnStorage(),
+                clothesBaseInfo.getAmount(),
                 clothesBaseInfo.getColor(),
-                clothesBaseInfo.getClothesBaseSize(),
+                clothesBaseInfo.getSize(),
                 clothesBaseInfo.getImages());
     }
 }

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +53,7 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
             ClothesBase clothesBase = ClothesBaseMapper.INSTANCE.clothesBaseDTOToClothesBase(clothesBaseDTO);
             ClothesBaseInfo clothesBaseInfo = ClothesBaseMapper.INSTANCE.clothesBaseInfoDTOToClothesBaseInfo(clothesBaseInfoDto);
             clothesBase = clothesBaseRepository.save(clothesBase);
+            clothesBaseInfo.setUuid(UUID.randomUUID());
             clothesBaseInfo.setBase(clothesBase);
             clothesBaseInfo = clothesBaseInfoRepository.save(clothesBaseInfo);
             if (images != null) {

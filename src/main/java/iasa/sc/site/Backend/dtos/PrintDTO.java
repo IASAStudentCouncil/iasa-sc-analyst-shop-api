@@ -21,7 +21,7 @@ public class PrintDTO {
     @JsonCreator
     public PrintDTO(@JsonProperty(value = "id") Integer id,
                     @JsonProperty(value = "print_type") PrintType printType,
-                    @JsonProperty(value = "photos_urls") List<Image> images) {
+                    @JsonProperty(value = "images") List<Image> images) {
         this.id = id;
         this.printType = printType;
         this.images = images;

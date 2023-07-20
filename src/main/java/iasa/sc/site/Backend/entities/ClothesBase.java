@@ -30,5 +30,4 @@ public class ClothesBase {
 
     @OneToMany(mappedBy = "base")
     private List<ClothesBaseInfo> clothesBaseInfo;
-
 }

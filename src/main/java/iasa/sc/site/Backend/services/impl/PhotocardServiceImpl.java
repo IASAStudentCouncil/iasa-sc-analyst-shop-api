@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,10 @@ public class PhotocardServiceImpl implements PhotocardService {
         return photocardRepository
                 .findAll()
                 .stream()
-                .map(PhotocardMapper.INSTANCE::photocardToDto)
+                .map(photocard -> new PhotocardDTO(
+                        photocard.getId(),
+                        photocard.getType().toString(),
+                        imageService.getImageByUUID(photocard.getUuid())))
                 .toList();
     }
 
@@ -42,6 +46,8 @@ public class PhotocardServiceImpl implements PhotocardService {
     public void addNewPhotocard(PhotocardDTO photocardDTO, MultipartFile image) {
         try {
             Photocard photocard = PhotocardMapper.INSTANCE.DTOToPhotocard(photocardDTO);
+            photocard.setUuid(UUID.randomUUID());
+
             photocard = photocardRepository.save(photocard);
             if (image != null) {
                 imageService.saveImage(image, photocard.getUuid());

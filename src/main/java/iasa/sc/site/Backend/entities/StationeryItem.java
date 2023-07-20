@@ -2,11 +2,14 @@ package iasa.sc.site.Backend.entities;
 
 import iasa.sc.site.Backend.entities.enums.StationeryItemType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 
@@ -22,8 +25,7 @@ public class StationeryItem {
     @Column(name = "id", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "uuid", nullable = false, unique = true, columnDefinition = "uuid")
-    @Generated(value = GenerationTime.INSERT)
+    @Column(name = "uuid", nullable = false, unique = true)
     private UUID uuid;
 
     @Enumerated(EnumType.STRING)
@@ -38,5 +40,5 @@ public class StationeryItem {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "uuid", referencedColumnName = "uuid")
-    private List<Image> images;
+    private Set<Image> images;
 }

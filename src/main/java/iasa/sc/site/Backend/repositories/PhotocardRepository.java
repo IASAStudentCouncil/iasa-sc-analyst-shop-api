@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PhotocardRepository extends JpaRepository<Photocard, Integer> {
-    @EntityGraph(attributePaths = "images")
+    @EntityGraph(attributePaths = "image")
     List<Photocard> findAll();
 }

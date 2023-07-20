@@ -15,27 +15,27 @@ import java.util.Set;
 public class ClothesBaseInfoDTO {
     private final Integer id;
 
-    @Min(value = 0, message = "count on storage must be greater than or equal to zero")
-    private final Integer countOnStorage;
+    @Min(value = 0, message = "amount must be greater than or equal to zero")
+    private final Integer amount;
 
     @NotNull(message = "color is required")
     private final ClothesBaseColor color;
 
     @NotNull(message = "size is required")
-    private final ClothesBaseSize clothesBaseSize;
+    private final ClothesBaseSize size;
 
     private final Set<Image> images;
 
     @JsonCreator
     public ClothesBaseInfoDTO(@JsonProperty("id") Integer id,
-                              @JsonProperty("count_on_storage") Integer countOnStorage,
+                              @JsonProperty("amount") Integer amount,
                               @JsonProperty("color") ClothesBaseColor color,
-                              @JsonProperty("size") ClothesBaseSize clothesBaseSize,
+                              @JsonProperty("size") ClothesBaseSize size,
                               @JsonProperty("images") Set<Image> images) {
         this.id = id;
-        this.countOnStorage = countOnStorage;
+        this.amount = amount;
         this.color = color;
-        this.clothesBaseSize = clothesBaseSize;
+        this.size = size;
         this.images = images;
     }
 }

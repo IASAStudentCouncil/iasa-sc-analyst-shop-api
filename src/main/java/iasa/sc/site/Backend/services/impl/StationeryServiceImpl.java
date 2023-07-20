@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -51,6 +52,7 @@ public class StationeryServiceImpl implements StationeryService {
         }
 
         item = stationeryRepository.save(item);
+        item.setUuid(UUID.randomUUID());
 
         if (images != null) {
             imageService.saveAllImages(images, item.getUuid());

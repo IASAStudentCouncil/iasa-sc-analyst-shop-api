@@ -10,6 +10,7 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -24,8 +25,7 @@ public class Print {
     @Column(name = "id", nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "uuid", nullable = false, unique = true, columnDefinition = "uuid")
-    @Generated(value = GenerationTime.INSERT)
+    @Column(name = "uuid", nullable = false, unique = true)
     private UUID uuid;
 
     @Enumerated(EnumType.STRING)
@@ -34,5 +34,5 @@ public class Print {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "uuid", referencedColumnName = "uuid")
-    private List<Image> images;
+    private Set<Image> images;
 }

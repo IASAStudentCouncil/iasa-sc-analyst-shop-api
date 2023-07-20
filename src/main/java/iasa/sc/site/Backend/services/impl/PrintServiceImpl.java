@@ -47,6 +47,7 @@ public class PrintServiceImpl implements PrintService {
     public void addNewPrint(PrintDTO printDto, List<MultipartFile> images) {
         try {
             Print inputPrint = PrintMapper.INSTANCE.printDtoToPrint(printDto);
+            inputPrint.setUuid(UUID.randomUUID());
             inputPrint = printRepository.save(inputPrint);
             if (images != null) {
                 imageService.saveAllImages(images, inputPrint.getUuid());
