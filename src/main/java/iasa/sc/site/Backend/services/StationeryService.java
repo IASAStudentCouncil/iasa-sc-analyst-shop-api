@@ -8,6 +8,8 @@ import java.util.List;
 public interface StationeryService {
     List<StationeryItemDTO> getAllStationeryItems();
 
+    List<StationeryItemDTO> getAllStationeryItems(String page, String limit);
+
     StationeryItemDTO getStationeryItemById(int id);
 
     void addStationeryItem(StationeryItemDTO stationeryItemDto, List<MultipartFile> images);

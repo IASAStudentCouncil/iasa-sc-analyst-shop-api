@@ -9,6 +9,7 @@ import iasa.sc.site.Backend.repositories.PrintRepository;
 import iasa.sc.site.Backend.services.ImageService;
 import iasa.sc.site.Backend.services.PrintService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +21,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PrintServiceImpl implements PrintService {
     private final PrintRepository printRepository;
+
     private final ImageService imageService;
+
+    @Override
+    public List<PrintDTO> getAllPrints(String page, String limit) {
+        int pageNumber = Integer.parseInt(page);
+        int pageSize = Integer.parseInt(limit);
+        Pageable pageable = Pageable
+                .ofSize(pageSize)
+                .withPage(pageNumber);
+        return printRepository
+                .findAll(pageable)
+                .map(PrintMapper.INSTANCE::printToDto)
+                .toList();
+    }
 
     @Override
     public List<PrintDTO> getAllPrints() {

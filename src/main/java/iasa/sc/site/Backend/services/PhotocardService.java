@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface PhotocardService {
     List<PhotocardDTO> getAllPhotocards();
+    List<PhotocardDTO> getAllPhotocards(String page, String limit);
 
     PhotocardDTO getPhotocardById(int id);
 

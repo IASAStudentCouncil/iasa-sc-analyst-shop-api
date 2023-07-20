@@ -8,6 +8,8 @@ import java.util.List;
 public interface PrintService {
     List<PrintDTO> getAllPrints();
 
+    List<PrintDTO> getAllPrints(String page, String limit);
+
     void deletePrintById(String id);
 
     void addNewPrint(PrintDTO printDto, List<MultipartFile> images);

@@ -10,6 +10,7 @@ import iasa.sc.site.Backend.services.ImageService;
 import iasa.sc.site.Backend.services.PhotocardService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PhotocardServiceImpl implements PhotocardService {
     private final PhotocardRepository photocardRepository;
+
     private final ImageService imageService;
 
     @Override
@@ -31,6 +33,19 @@ public class PhotocardServiceImpl implements PhotocardService {
                         photocard.getId(),
                         photocard.getType().toString(),
                         imageService.getImageByUUID(photocard.getUuid())))
+                .toList();
+    }
+
+    @Override
+    public List<PhotocardDTO> getAllPhotocards(String page, String limit) {
+        int pageNumber = Integer.parseInt(page);
+        int pageSize = Integer.parseInt(page);
+        Pageable pageable = Pageable
+                .ofSize(pageSize)
+                .withPage(pageNumber);
+        return photocardRepository
+                .findAll(pageable)
+                .map(PhotocardMapper.INSTANCE::photocardToDto)
                 .toList();
     }
 

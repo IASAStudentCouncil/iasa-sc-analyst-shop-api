@@ -20,8 +20,9 @@ public class PhotocardController {
     private final PhotocardService photocardService;
 
     @GetMapping
-    public ResponseEntity<List<PhotocardDTO>> getAllPhotocards() {
-        List<PhotocardDTO> photocards = photocardService.getAllPhotocards();
+    public ResponseEntity<List<PhotocardDTO>> getAllPhotocards(@RequestParam(name = "page", defaultValue = "0") String page,
+                                                               @RequestParam(name = "limit", defaultValue = "50") String limit) {
+        List<PhotocardDTO> photocards = photocardService.getAllPhotocards(page, limit);
         return new ResponseEntity<>(photocards, HttpStatus.OK);
     }
 

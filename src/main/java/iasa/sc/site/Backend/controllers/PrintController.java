@@ -20,8 +20,9 @@ public class PrintController {
     private final PrintService printService;
 
     @GetMapping
-    public ResponseEntity<List<PrintDTO>> getAllPrints() {
-        List<PrintDTO> prints = printService.getAllPrints();
+    public ResponseEntity<List<PrintDTO>> getAllPrints(@RequestParam(name = "page", defaultValue = "0") String page,
+                                                       @RequestParam(name = "limit", defaultValue = "50") String limit) {
+        List<PrintDTO> prints = printService.getAllPrints(page, limit);
         return new ResponseEntity<>(prints, HttpStatus.OK);
     }
 

@@ -19,5 +19,5 @@ public interface ClothesBaseService {
 
     List<ClothesBaseInfoDTO> getAllClothesBasesInfo();
 
-    List<ClothesBaseDTO> getAllClothesBasesByType(String type, String offset, String limit);
+    List<ClothesBaseDTO> getAllClothesBasesByType(String type, String page, String limit);
 }

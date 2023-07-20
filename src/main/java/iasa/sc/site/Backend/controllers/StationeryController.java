@@ -20,8 +20,9 @@ public class StationeryController {
     private final StationeryService stationeryService;
 
     @GetMapping
-    public ResponseEntity<List<StationeryItemDTO>> getAllStationeryItems() {
-        List<StationeryItemDTO> items = stationeryService.getAllStationeryItems();
+    public ResponseEntity<List<StationeryItemDTO>> getAllStationeryItems(@RequestParam(value = "page", defaultValue = "0") String page,
+                                                                         @RequestParam(value = "limit", defaultValue = "50") String limit) {
+        List<StationeryItemDTO> items = stationeryService.getAllStationeryItems(page,limit);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 

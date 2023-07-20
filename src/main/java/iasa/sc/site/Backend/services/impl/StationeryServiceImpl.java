@@ -10,6 +10,7 @@ import iasa.sc.site.Backend.services.ImageService;
 import iasa.sc.site.Backend.services.StationeryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +29,17 @@ public class StationeryServiceImpl implements StationeryService {
         return stationeryRepository
                 .findAll()
                 .stream()
+                .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO)
+                .toList();
+    }
+
+    @Override
+    public List<StationeryItemDTO> getAllStationeryItems(String page, String limit) {
+        int pageSize = Integer.parseInt(limit);
+        int pageNumber = Integer.parseInt(page);
+        Pageable pageable = Pageable.ofSize(pageSize).withPage(pageNumber);
+        return stationeryRepository
+                .findAll(pageable)
                 .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO)
                 .toList();
     }

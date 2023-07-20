@@ -93,8 +93,8 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
     }
 
     @Override
-    public List<ClothesBaseDTO> getAllClothesBasesByType(String type, String offset, String limit) {
-        int pageNumber = Integer.parseInt(offset);
+    public List<ClothesBaseDTO> getAllClothesBasesByType(String type, String page, String limit) {
+        int pageNumber = Integer.parseInt(page);
         int pageSize = Integer.parseInt(limit);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         return clothesBaseRepository
