@@ -1,7 +1,5 @@
 package iasa.sc.site.Backend.dtos;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import iasa.sc.site.Backend.entities.Image;
 import iasa.sc.site.Backend.entities.enums.ClothesBaseColor;
 import iasa.sc.site.Backend.entities.enums.ClothesBaseSize;
@@ -25,17 +23,4 @@ public class ClothesBaseInfoDTO {
     private final ClothesBaseSize size;
 
     private final Set<Image> images;
-
-    @JsonCreator
-    public ClothesBaseInfoDTO(@JsonProperty("id") Integer id,
-                              @JsonProperty("amount") Integer amount,
-                              @JsonProperty("color") ClothesBaseColor color,
-                              @JsonProperty("size") ClothesBaseSize size,
-                              @JsonProperty("images") Set<Image> images) {
-        this.id = id;
-        this.amount = amount;
-        this.color = color;
-        this.size = size;
-        this.images = images;
-    }
 }
