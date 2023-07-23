@@ -4,13 +4,12 @@ import iasa.sc.site.Backend.dtos.PhotocardDTO;
 import iasa.sc.site.Backend.services.PhotocardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/photocards")
@@ -20,9 +19,10 @@ public class PhotocardController {
     private final PhotocardService photocardService;
 
     @GetMapping
-    public ResponseEntity<List<PhotocardDTO>> getAllPhotocards(@RequestParam(name = "page", defaultValue = "0") String page,
-                                                               @RequestParam(name = "limit", defaultValue = "50") String limit) {
-        List<PhotocardDTO> photocards = photocardService.getAllPhotocards(page, limit);
+    public ResponseEntity<Page<PhotocardDTO>> getAllPhotocards(@RequestParam(name = "type", defaultValue = "OUR_CLIENTS") String type,
+                                                               @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                               @RequestParam(name = "limit", defaultValue = "50") Integer limit) {
+        Page<PhotocardDTO> photocards = photocardService.getAllPhotocards(type, page, limit);
         return new ResponseEntity<>(photocards, HttpStatus.OK);
     }
 

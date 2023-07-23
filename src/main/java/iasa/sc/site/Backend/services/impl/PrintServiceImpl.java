@@ -3,13 +3,16 @@ package iasa.sc.site.Backend.services.impl;
 import iasa.sc.site.Backend.dtos.PrintDTO;
 import iasa.sc.site.Backend.dtos.mappers.PrintMapper;
 import iasa.sc.site.Backend.entities.Print;
+import iasa.sc.site.Backend.entities.enums.PrintType;
+import iasa.sc.site.Backend.exceptions.UnexistingTypeException;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repositories.PrintRepository;
 import iasa.sc.site.Backend.services.ImageService;
 import iasa.sc.site.Backend.services.PrintService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,16 +28,18 @@ public class PrintServiceImpl implements PrintService {
     private final ImageService imageService;
 
     @Override
-    public List<PrintDTO> getAllPrints(String page, String limit) {
-        int pageNumber = Integer.parseInt(page);
-        int pageSize = Integer.parseInt(limit);
-        Pageable pageable = Pageable
-                .ofSize(pageSize)
-                .withPage(pageNumber);
+    public Page<PrintDTO> getAllPrints(String type, int page, int limit) {
         return printRepository
-                .findAll(pageable)
-                .map(PrintMapper.INSTANCE::printToDto)
-                .toList();
+                .findAllByPrintType(parsePrintType(type), PageRequest.of(page, limit))
+                .map(PrintMapper.INSTANCE::printToDto);
+    }
+
+    private PrintType parsePrintType(String type) {
+        try {
+            return PrintType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new UnexistingTypeException(type);
+        }
     }
 
     @Override

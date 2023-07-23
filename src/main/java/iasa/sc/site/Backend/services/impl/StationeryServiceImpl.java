@@ -3,6 +3,8 @@ package iasa.sc.site.Backend.services.impl;
 import iasa.sc.site.Backend.dtos.StationeryItemDTO;
 import iasa.sc.site.Backend.dtos.mappers.StationeryItemMapper;
 import iasa.sc.site.Backend.entities.StationeryItem;
+import iasa.sc.site.Backend.entities.enums.StationeryItemType;
+import iasa.sc.site.Backend.exceptions.UnexistingTypeException;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repositories.StationeryRepository;
@@ -10,7 +12,8 @@ import iasa.sc.site.Backend.services.ImageService;
 import iasa.sc.site.Backend.services.StationeryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,14 +37,18 @@ public class StationeryServiceImpl implements StationeryService {
     }
 
     @Override
-    public List<StationeryItemDTO> getAllStationeryItems(String page, String limit) {
-        int pageSize = Integer.parseInt(limit);
-        int pageNumber = Integer.parseInt(page);
-        Pageable pageable = Pageable.ofSize(pageSize).withPage(pageNumber);
+    public Page<StationeryItemDTO> getAllStationeryItems(String type, int page, int limit) {
         return stationeryRepository
-                .findAll(pageable)
-                .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO)
-                .toList();
+                .findAllByType(parseStationeryItemType(type), PageRequest.of(page, limit))
+                .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO);
+    }
+
+    private StationeryItemType parseStationeryItemType(String type) {
+        try {
+            return StationeryItemType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new UnexistingTypeException(type);
+        }
     }
 
     @Override

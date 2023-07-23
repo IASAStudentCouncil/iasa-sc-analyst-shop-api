@@ -3,6 +3,8 @@ package iasa.sc.site.Backend.services.impl;
 import iasa.sc.site.Backend.dtos.PhotocardDTO;
 import iasa.sc.site.Backend.dtos.mappers.PhotocardMapper;
 import iasa.sc.site.Backend.entities.Photocard;
+import iasa.sc.site.Backend.entities.enums.PhotocardType;
+import iasa.sc.site.Backend.exceptions.UnexistingTypeException;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repositories.PhotocardRepository;
@@ -10,7 +12,8 @@ import iasa.sc.site.Backend.services.ImageService;
 import iasa.sc.site.Backend.services.PhotocardService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,16 +40,18 @@ public class PhotocardServiceImpl implements PhotocardService {
     }
 
     @Override
-    public List<PhotocardDTO> getAllPhotocards(String page, String limit) {
-        int pageNumber = Integer.parseInt(page);
-        int pageSize = Integer.parseInt(page);
-        Pageable pageable = Pageable
-                .ofSize(pageSize)
-                .withPage(pageNumber);
+    public Page<PhotocardDTO> getAllPhotocards(String type, int page, int limit) {
         return photocardRepository
-                .findAll(pageable)
-                .map(PhotocardMapper.INSTANCE::photocardToDto)
-                .toList();
+                .findAllByType(parsePhotocardType(type), PageRequest.of(page, limit))
+                .map(PhotocardMapper.INSTANCE::photocardToDto);
+    }
+
+    private PhotocardType parsePhotocardType(String type) {
+        try {
+            return PhotocardType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new UnexistingTypeException(type);
+        }
     }
 
     @Override

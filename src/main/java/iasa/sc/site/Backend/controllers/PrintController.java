@@ -4,6 +4,7 @@ import iasa.sc.site.Backend.dtos.PrintDTO;
 import iasa.sc.site.Backend.services.PrintService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,10 @@ public class PrintController {
     private final PrintService printService;
 
     @GetMapping
-    public ResponseEntity<List<PrintDTO>> getAllPrints(@RequestParam(name = "page", defaultValue = "0") String page,
-                                                       @RequestParam(name = "limit", defaultValue = "50") String limit) {
-        List<PrintDTO> prints = printService.getAllPrints(page, limit);
+    public ResponseEntity<Page<PrintDTO>> getAllPrints(@RequestParam(defaultValue = "POPULAR", name = "type") String type,
+                                                       @RequestParam(name = "page", defaultValue = "0") Integer page,
+                                                       @RequestParam(name = "limit", defaultValue = "50") Integer limit) {
+        Page<PrintDTO> prints = printService.getAllPrints(type, page, limit);
         return new ResponseEntity<>(prints, HttpStatus.OK);
     }
 

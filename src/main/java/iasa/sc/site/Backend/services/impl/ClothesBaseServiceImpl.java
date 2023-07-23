@@ -5,6 +5,8 @@ import iasa.sc.site.Backend.dtos.ClothesBaseInfoDTO;
 import iasa.sc.site.Backend.dtos.mappers.ClothesBaseMapper;
 import iasa.sc.site.Backend.entities.ClothesBase;
 import iasa.sc.site.Backend.entities.ClothesBaseInfo;
+import iasa.sc.site.Backend.entities.enums.ClothesBaseType;
+import iasa.sc.site.Backend.exceptions.UnexistingTypeException;
 import iasa.sc.site.Backend.exceptions.UnknownIdException;
 import iasa.sc.site.Backend.exceptions.ValidationException;
 import iasa.sc.site.Backend.repositories.ClothesBaseInfoRepository;
@@ -12,8 +14,8 @@ import iasa.sc.site.Backend.repositories.ClothesBaseRepository;
 import iasa.sc.site.Backend.services.ClothesBaseService;
 import iasa.sc.site.Backend.services.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,14 +95,17 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
     }
 
     @Override
-    public List<ClothesBaseDTO> getAllClothesBasesByType(String type, String page, String limit) {
-        int pageNumber = Integer.parseInt(page);
-        int pageSize = Integer.parseInt(limit);
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public Page<ClothesBaseDTO> getAllClothesBasesByType(String type, int page, int limit) {
         return clothesBaseRepository
-                .findByType(type, pageable)
-                .stream()
-                .map(ClothesBaseMapper.INSTANCE::clothesBaseToClothesBaseDto)
-                .toList();
+                .findAllByType(parseClothesBaseType(type), PageRequest.of(page, limit))
+                .map(ClothesBaseMapper.INSTANCE::clothesBaseToClothesBaseDto);
+    }
+
+    private ClothesBaseType parseClothesBaseType(String type) {
+        try {
+            return ClothesBaseType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new UnexistingTypeException(type);
+        }
     }
 }

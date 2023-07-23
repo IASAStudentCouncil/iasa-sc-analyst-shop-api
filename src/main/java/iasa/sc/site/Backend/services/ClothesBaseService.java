@@ -2,6 +2,7 @@ package iasa.sc.site.Backend.services;
 
 import iasa.sc.site.Backend.dtos.ClothesBaseDTO;
 import iasa.sc.site.Backend.dtos.ClothesBaseInfoDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface ClothesBaseService {
 
     List<ClothesBaseInfoDTO> getAllClothesBasesInfo();
 
-    List<ClothesBaseDTO> getAllClothesBasesByType(String type, String page, String limit);
+    Page<ClothesBaseDTO> getAllClothesBasesByType(String type, int page, int limit);
 }

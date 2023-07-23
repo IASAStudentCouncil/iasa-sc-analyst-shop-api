@@ -4,6 +4,7 @@ import iasa.sc.site.Backend.dtos.StationeryItemDTO;
 import iasa.sc.site.Backend.services.StationeryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,10 @@ public class StationeryController {
     private final StationeryService stationeryService;
 
     @GetMapping
-    public ResponseEntity<List<StationeryItemDTO>> getAllStationeryItems(@RequestParam(value = "page", defaultValue = "0") String page,
-                                                                         @RequestParam(value = "limit", defaultValue = "50") String limit) {
-        List<StationeryItemDTO> items = stationeryService.getAllStationeryItems(page,limit);
+    public ResponseEntity<Page<StationeryItemDTO>> getAllStationeryItems(@RequestParam(value = "type", defaultValue = "STICKER") String type,
+                                                                         @RequestParam(value = "page", defaultValue = "0") int page,
+                                                                         @RequestParam(value = "limit", defaultValue = "50") int limit) {
+        Page<StationeryItemDTO> items = stationeryService.getAllStationeryItems(type, page, limit);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 

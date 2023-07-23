@@ -5,6 +5,7 @@ import iasa.sc.site.Backend.dtos.ClothesBaseInfoDTO;
 import iasa.sc.site.Backend.services.ClothesBaseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,11 @@ public class ClothesBaseController {
     private final ClothesBaseService clothesBaseService;
 
     @GetMapping
-    public ResponseEntity<List<ClothesBaseDTO>> getAllClothesBases(
-            @RequestParam(defaultValue = "0", name = "page") String page,
-            @RequestParam(defaultValue = "10", name = "limit") String limit,
-            @RequestParam(defaultValue = "TSHIRTS", name = "type") String type) {
+    public ResponseEntity<Page<ClothesBaseDTO>> getAllClothesBases(
+            @RequestParam(defaultValue = "TSHIRTS", name = "type") String type,
+            @RequestParam(defaultValue = "0", name = "page") Integer page,
+            @RequestParam(defaultValue = "10", name = "limit") Integer limit
+            ) {
         return new ResponseEntity<>(clothesBaseService.getAllClothesBasesByType(type, page, limit), HttpStatus.OK);
     }
 

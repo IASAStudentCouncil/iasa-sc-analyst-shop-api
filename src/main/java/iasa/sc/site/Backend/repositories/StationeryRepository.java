@@ -1,11 +1,11 @@
 package iasa.sc.site.Backend.repositories;
 
 import iasa.sc.site.Backend.entities.StationeryItem;
+import iasa.sc.site.Backend.entities.enums.StationeryItemType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -13,6 +13,6 @@ public interface StationeryRepository extends JpaRepository<StationeryItem, Inte
     @EntityGraph(attributePaths = "images")
     List<StationeryItem> findAll();
 
-    @Query("SELECT s FROM StationeryItem s LEFT JOIN Image i")
-    Page<StationeryItem> findAll(Pageable pageable);
+    @EntityGraph(attributePaths = "images")
+    Page<StationeryItem> findAllByType(StationeryItemType stationeryItemType, Pageable pageable);
 }

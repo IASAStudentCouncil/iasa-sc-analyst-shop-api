@@ -1,6 +1,7 @@
 package iasa.sc.site.Backend.services;
 
 import iasa.sc.site.Backend.dtos.PrintDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public interface PrintService {
     List<PrintDTO> getAllPrints();
 
-    List<PrintDTO> getAllPrints(String page, String limit);
+    Page<PrintDTO> getAllPrints(String type, int page, int limit);
 
     void deletePrintById(String id);
 
