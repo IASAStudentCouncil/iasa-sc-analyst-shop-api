@@ -15,7 +15,7 @@ public interface PrintService {
 
     void addNewPrint(PrintDTO printDto, List<MultipartFile> images);
 
-    void updatePrint(PrintDTO printDto, List<MultipartFile> images);
+    void updatePrint(int printId, PrintDTO printDto, List<MultipartFile> images);
 
     void deleteAllPrints();
 

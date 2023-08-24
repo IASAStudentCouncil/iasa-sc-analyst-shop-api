@@ -78,15 +78,22 @@ public class PrintServiceImpl implements PrintService {
     }
 
     @Override
-    public void updatePrint(PrintDTO printDto, List<MultipartFile> images) {
+    public void updatePrint(int printId, PrintDTO printDto, List<MultipartFile> images) {
+        Print print;
+
         try {
-            Print print = PrintMapper.INSTANCE.printDtoToPrint(printDto);
-            print = printRepository.save(print);
-            if (images != null) {
-                imageService.saveAllImages(images, print.getUuid());
-            }
+            print = PrintMapper.INSTANCE.printDtoToPrint(printDto);
         } catch (Exception e) {
             throw new ValidationException();
+        }
+
+        Print printEntity = printRepository.findById(printId).orElseThrow(UnknownIdException::new);
+
+        printEntity.setPrintType(print.getPrintType());
+        printRepository.save(printEntity);
+
+        if (images != null) {
+            imageService.saveAllImages(images, printEntity.getUuid());
         }
     }
 

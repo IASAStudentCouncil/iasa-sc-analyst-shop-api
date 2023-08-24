@@ -41,10 +41,11 @@ public class PrintController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<Void> updatePrint(@RequestPart("print") @Valid PrintDTO printDto,
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updatePrint(@PathVariable int id,
+                                            @RequestPart("print") @Valid PrintDTO printDto,
                                             @RequestPart(value = "images", required = false) List<MultipartFile> images) {
-        printService.updatePrint(printDto, images);
+        printService.updatePrint(id, printDto, images);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

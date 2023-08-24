@@ -1,7 +1,5 @@
 package iasa.sc.site.Backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +23,6 @@ public class Image {
     @Column(name = "url", unique = false, nullable = false)
     private String url;
 
-    @Column(name = "uuid", unique = false, nullable = false)
+    @Column(name = "uuid", unique = false, nullable = true)
     private UUID uuid;
 }

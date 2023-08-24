@@ -8,6 +8,7 @@ import iasa.sc.site.Backend.repositories.ImageRepository;
 import iasa.sc.site.Backend.services.ImageService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,7 +54,8 @@ public class ImageServiceImpl implements ImageService {
         imageRepository.save(new Image(0, blobClient.getBlobUrl(), uuid));
     }
 
-    private void uploadImage(BlobClient blobClient, MultipartFile image) {
+    @Async
+    protected void uploadImage(BlobClient blobClient, MultipartFile image) {
         try {
             blobClient.upload(image.getInputStream(), image.getSize(), true);
         } catch (IOException e) {
@@ -78,8 +80,6 @@ public class ImageServiceImpl implements ImageService {
                 .stream()
                 .filter(blobItem -> blobItem.getName().contains(uuid.toString()))
                 .forEach(blobItem -> imageContainerClient.getBlobClient(blobItem.getName()).delete());
-
-        imageRepository.deleteAllByUuid(uuid);
     }
 
     @Override
