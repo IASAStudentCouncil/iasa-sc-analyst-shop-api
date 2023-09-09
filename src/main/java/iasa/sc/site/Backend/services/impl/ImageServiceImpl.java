@@ -12,6 +12,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.List;
@@ -49,7 +52,7 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public void saveImage(MultipartFile image, UUID uuid) {
-        BlobClient blobClient = imageContainerClient.getBlobClient(image.getName() + "-" + uuid.toString() + "-" + generateRandomStringSalt() + ".png");
+        BlobClient blobClient = imageContainerClient.getBlobClient(image.getName() + "-" + uuid.toString() + "-" + generateRandomStringSalt() + ".webp");
         uploadImage(blobClient, image);
         imageRepository.save(new Image(0, blobClient.getBlobUrl(), uuid));
     }
@@ -57,7 +60,11 @@ public class ImageServiceImpl implements ImageService {
     @Async
     protected void uploadImage(BlobClient blobClient, MultipartFile image) {
         try {
-            blobClient.upload(image.getInputStream(), image.getSize(), true);
+            BufferedImage webpImage = ImageIO.read(image.getInputStream());
+            File webpFile = new File(image.getName() + ".webp");
+            ImageIO.write(webpImage, "webp", webpFile);
+
+            blobClient.uploadFromFile(webpFile.getAbsolutePath(), true);
         } catch (IOException e) {
             throw new RuntimeException("Something is wrong with image");
         }
