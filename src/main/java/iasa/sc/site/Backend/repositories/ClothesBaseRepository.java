@@ -15,4 +15,7 @@ public interface ClothesBaseRepository extends JpaRepository<ClothesBase, Intege
 
     @EntityGraph(attributePaths = {"clothesBaseInfo", "clothesBaseInfo.images"})
     Page<ClothesBase> findAllByType(ClothesBaseType type, Pageable pageable);
+
+    @EntityGraph(attributePaths = {"clothesBaseInfo", "clothesBaseInfo.images"})
+    Page<ClothesBase> findAll(Pageable pageable);
 }

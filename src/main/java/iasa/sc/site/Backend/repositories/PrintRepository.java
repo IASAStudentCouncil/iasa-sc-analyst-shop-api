@@ -19,4 +19,7 @@ public interface PrintRepository extends JpaRepository<Print, Integer> {
 
     @EntityGraph(attributePaths = "images")
     Page<Print> findAllByPrintType(PrintType printType, Pageable pageable);
+
+    @EntityGraph(attributePaths = "images")
+    Page<Print> findAll(Pageable pageable);
 }

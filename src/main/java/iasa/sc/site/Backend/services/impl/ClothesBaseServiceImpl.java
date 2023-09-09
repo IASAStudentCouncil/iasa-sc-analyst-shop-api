@@ -96,6 +96,10 @@ public class ClothesBaseServiceImpl implements ClothesBaseService {
 
     @Override
     public Page<ClothesBaseDTO> getAllClothesBasesByType(String type, int page, int limit) {
+        if (type == null) {
+            return clothesBaseRepository.findAll(PageRequest.of(page, limit))
+                    .map(ClothesBaseMapper.INSTANCE::clothesBaseToClothesBaseDto);
+        }
         return clothesBaseRepository
                 .findAllByType(parseClothesBaseType(type), PageRequest.of(page, limit))
                 .map(ClothesBaseMapper.INSTANCE::clothesBaseToClothesBaseDto);

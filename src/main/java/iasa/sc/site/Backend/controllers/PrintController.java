@@ -21,7 +21,7 @@ public class PrintController {
     private final PrintService printService;
 
     @GetMapping
-    public ResponseEntity<Page<PrintDTO>> getAllPrints(@RequestParam(defaultValue = "POPULAR", name = "type") String type,
+    public ResponseEntity<Page<PrintDTO>> getAllPrints(@RequestParam(name = "type", required = false) String type,
                                                        @RequestParam(name = "page", defaultValue = "0") Integer page,
                                                        @RequestParam(name = "limit", defaultValue = "50") Integer limit) {
         Page<PrintDTO> prints = printService.getAllPrints(type, page, limit);

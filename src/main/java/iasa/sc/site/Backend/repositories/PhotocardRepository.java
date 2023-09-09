@@ -15,4 +15,7 @@ public interface PhotocardRepository extends JpaRepository<Photocard, Integer> {
 
     @EntityGraph(attributePaths = "image")
     Page<Photocard> findAllByType(PhotocardType photocardType, Pageable pageable);
+
+    @EntityGraph(attributePaths = "image")
+    Page<Photocard> findAll(Pageable pageable);
 }

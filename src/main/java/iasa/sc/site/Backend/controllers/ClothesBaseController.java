@@ -23,9 +23,9 @@ public class ClothesBaseController {
 
     @GetMapping
     public ResponseEntity<Page<ClothesBaseDTO>> getAllClothesBases(
-            @RequestParam(defaultValue = "TSHIRTS", name = "type") String type,
-            @RequestParam(defaultValue = "0", name = "page") Integer page,
-            @RequestParam(defaultValue = "10", name = "limit") Integer limit
+            @RequestParam(name = "type", required = false) String type,
+            @RequestParam(name = "page", defaultValue = "0") Integer page,
+            @RequestParam(name = "limit", defaultValue = "10") Integer limit
             ) {
         return new ResponseEntity<>(clothesBaseService.getAllClothesBasesByType(type, page, limit), HttpStatus.OK);
     }

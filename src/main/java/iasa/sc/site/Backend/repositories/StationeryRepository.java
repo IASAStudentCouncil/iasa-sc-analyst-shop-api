@@ -15,4 +15,7 @@ public interface StationeryRepository extends JpaRepository<StationeryItem, Inte
 
     @EntityGraph(attributePaths = "images")
     Page<StationeryItem> findAllByType(StationeryItemType stationeryItemType, Pageable pageable);
+
+    @EntityGraph(attributePaths = "images")
+    Page<StationeryItem> findAll(Pageable pageable);
 }

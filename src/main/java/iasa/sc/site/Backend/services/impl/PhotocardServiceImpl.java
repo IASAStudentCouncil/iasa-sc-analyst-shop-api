@@ -41,6 +41,10 @@ public class PhotocardServiceImpl implements PhotocardService {
 
     @Override
     public Page<PhotocardDTO> getAllPhotocards(String type, int page, int limit) {
+        if (type == null) {
+            return photocardRepository.findAll(PageRequest.of(page, limit))
+                    .map(PhotocardMapper.INSTANCE::photocardToDto);
+        }
         return photocardRepository
                 .findAllByType(parsePhotocardType(type), PageRequest.of(page, limit))
                 .map(PhotocardMapper.INSTANCE::photocardToDto);

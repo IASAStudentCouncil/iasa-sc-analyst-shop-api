@@ -21,7 +21,7 @@ public class StationeryController {
     private final StationeryService stationeryService;
 
     @GetMapping
-    public ResponseEntity<Page<StationeryItemDTO>> getAllStationeryItems(@RequestParam(value = "type", defaultValue = "STICKER") String type,
+    public ResponseEntity<Page<StationeryItemDTO>> getAllStationeryItems(@RequestParam(value = "type", required = false) String type,
                                                                          @RequestParam(value = "page", defaultValue = "0") int page,
                                                                          @RequestParam(value = "limit", defaultValue = "50") int limit) {
         Page<StationeryItemDTO> items = stationeryService.getAllStationeryItems(type, page, limit);

@@ -29,6 +29,10 @@ public class PrintServiceImpl implements PrintService {
 
     @Override
     public Page<PrintDTO> getAllPrints(String type, int page, int limit) {
+        if (type == null) {
+            return printRepository.findAll(PageRequest.of(page, limit))
+                    .map(PrintMapper.INSTANCE::printToDto);
+        }
         return printRepository
                 .findAllByPrintType(parsePrintType(type), PageRequest.of(page, limit))
                 .map(PrintMapper.INSTANCE::printToDto);

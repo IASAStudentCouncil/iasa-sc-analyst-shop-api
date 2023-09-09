@@ -38,8 +38,11 @@ public class StationeryServiceImpl implements StationeryService {
 
     @Override
     public Page<StationeryItemDTO> getAllStationeryItems(String type, int page, int limit) {
-        return stationeryRepository
-                .findAllByType(parseStationeryItemType(type), PageRequest.of(page, limit))
+        if (type == null) {
+            return stationeryRepository.findAll(PageRequest.of(page, limit))
+                    .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO);
+        }
+        return stationeryRepository.findAllByType(parseStationeryItemType(type), PageRequest.of(page, limit))
                 .map(StationeryItemMapper.INSTANCE::stationeryItemToDTO);
     }
 
